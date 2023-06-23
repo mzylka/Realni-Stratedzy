@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}O nas - {% endblock %}
+{% block content %}
+<div class="base-content flex-col bg-gray-800 px-6 py-6">
+    {% if about_us %}
+        <div class="about-us__body">
+            {{ about_us.body | safe }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

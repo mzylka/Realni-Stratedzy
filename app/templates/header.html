@@ -1,0 +1,37 @@
+<header class="bg-gray-800">
+    <div class="header-cont relative max-w-7xl mx-auto px-4 flex">
+        <div class="header_logo">
+            <a href="{{url_for('main.index')}}">
+                <img class="block" id="logo" src="{{url_for('static', filename='images/header.png')}}" alt="Logo">
+            </a>
+        </div>
+        <div class="header_links flex">
+            <a class="block px-2">O nas</a>
+            <a class="block px-2">Lista gier RTS</a>
+            <a class="block px-2">Społeczności/Klany</a>
+            <a class="block px-2">LINK4</a>
+        </div>
+        <div class="header_control">
+            {% if current_user.is_administrator() %}
+            <a href="{{url_for('control_panel.index')}}">Panel Kontrolny</a>
+            {% endif %}
+        </div>
+        <div class="header_logout">
+            {% if current_user.is_authenticated %}
+            <a href="{{url_for('control_panel.auth.logout')}}">Wyloguj</a>
+            {% endif %}
+        </div>
+        <div class="header_auth">
+            {% if current_user.is_authenticated %}
+            <span>Zalogowany jako {{ current_user.username }}</span>
+            {% endif %}
+        </div>
+        <div class="header_search">
+            <form method="POST" action="{{url_for('main.search')}}">
+                {{ search_form.hidden_tag() }}
+                {{ search_form.searched() }}
+                {{ search_form.submit() }}
+            </form>
+        </div>
+    </div>
+</header>

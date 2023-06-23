@@ -1,0 +1,411 @@
+from flask import render_template, redirect, url_for, flash, abort
+from flask_login import login_required, current_user
+from .. import db
+from ..models import Role, User, Post, Game, Tag, Community, About
+from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs
+from . import control_panel
+from ..decorators import admin_required, content_editor_required, poster_required
+from ..helpers import upload_img
+
+
+# CONTROL_PANEL INDEX
+@control_panel.route('/')
+def index():
+    if current_user.is_anonymous:
+        return redirect(url_for('control_panel.auth.login'))
+    return render_template('control_panel/index.html')
+
+
+# Views for User Model and Authentication
+@control_panel.route('/users')
+@admin_required
+@login_required
+def users():
+    users = db.select(User)
+    page = db.paginate(users)
+    return render_template('control_panel/users.html', page=page)
+
+
+@control_panel.route('/user/<username>')
+@login_required
+def user(username):
+    user = db.session.execute(db.select(User).filter_by(username=username)).scalar_one()
+    posts = user.posts.order_by(Post.timestamp.desc()).all()
+    return render_template('control_panel/user.html', user=user, posts=posts)
+
+
+@control_panel.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
+@admin_required
+@login_required
+def edit_profile_admin(id):
+    user = db.get_or_404(User, id)
+    form = EditProfileAdminForm(user=user)
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.username = form.username.data
+        user.role = Role.query.get(form.role.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('The profile has been updated.')
+        return redirect(url_for('.user', username=user.username))
+    form.email.data = user.email
+    form.username.data = user.username
+    form.role.data = user.role_id
+    return render_template('control_panel/edit_profile.html', form=form, user=user)
+
+
+# Views for Post Model
+@control_panel.route('/posts')
+@login_required
+def posts_list():
+    posts = db.select(Post).order_by(Post.timestamp.desc())
+    page = db.paginate(posts)
+    print(page.items)
+    return render_template('control_panel/posts_list.html', page=page)
+
+
+@control_panel.route('/add-post', methods=['GET', 'POST'])
+@poster_required
+@login_required
+def add_post():
+    form = AddPostForm()
+    if form.validate_on_submit():
+        tags = form.tags.data.split(',')
+        strip_tags = set([i.strip() for i in tags])
+        post = Post(title=form.title.data, short_desc=form.short_desc.data, body=form.body.data, published=form.published.data, author=current_user, game=Game.query.get(form.game.data))
+        db.session.add(post)
+
+        for tag in strip_tags:
+            existing_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
+            if existing_tag:
+                post.tags.append(existing_tag)
+            else:
+                new_tag = Tag(name=tag)
+                post.tags.append(new_tag)
+
+        db.session.flush()
+
+        f = form.thumb.data
+        thumb_name = upload_img(f, str(post.id))
+        post.thumb_name = thumb_name
+
+        db.session.commit()
+        flash('Post został dodany.')
+        return redirect(url_for('.posts_list'))
+    print(form.errors)
+    return render_template('control_panel/add_post.html', form=form)
+
+
+@control_panel.route('/edit-post/<int:id>', methods=['GET', 'POST'])
+@poster_required
+@login_required
+def edit_post(id):
+    form = EditPostForm()
+    post = Post.query.get_or_404(id)
+
+    if not current_user.is_post_author(post) and not current_user.is_administrator():
+        abort(403)
+
+    post_tags = set(tag.name for tag in post.tags)
+
+    if form.validate_on_submit():
+        if form.thumb.data:
+            thumb_name = upload_img(form.thumb.data, post.slug)
+            post.thumb_name = thumb_name
+        post.title = form.title.data
+        post.body = form.body.data
+        post.game = Game.query.get(form.game.data)
+        post.published = form.published.data
+
+        tags = form.tags.data.split(',')
+        strip_tags = set([i.strip() for i in tags])  # Remove duplicate tags
+
+        #  Removing tags
+        tags_diff = post_tags.difference(strip_tags)
+        if tags_diff:
+            for tag in tags_diff:
+                p_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
+                post.tags.remove(p_tag)
+
+        #  Adding tags
+        for tag in strip_tags:
+            form_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
+
+            if form_tag is not None and form_tag.name in post_tags:  # If a tag exists in the post's tags
+                continue
+            if form_tag:
+                post.tags.append(form_tag)
+            else:
+                new_tag = Tag(name=tag)
+                post.tags.append(new_tag)
+
+        db.session.add(post)
+        db.session.commit()
+        flash('Post został zaktualizowany.')
+        return redirect(url_for('.posts_list'))
+
+    form.title.data = post.title
+    form.short_desc.data = post.short_desc
+    form.body.data = post.body
+    form.game.data = post.game_id
+    form.tags.data = ','.join(post_tags)
+    form.published.data = post.published
+    return render_template('control_panel/add_post.html', form=form, thumb=post.thumb_name)
+
+
+@control_panel.route('/delete-post/<int:id>')
+@poster_required
+@login_required
+def delete_post(id):
+    post = db.get_or_404(Post, id)
+    if not current_user.is_post_author(post) and not current_user.is_administrator():
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post został usunięty.')
+    return redirect(url_for('.posts_list'))
+
+
+@control_panel.route('/show-post/<int:id>')
+@login_required
+def show_post(id):
+    post = db.get_or_404(Post, id)
+    post_tags = [tag.name for tag in post.tags]
+    return render_template('main/post.html', post=post, post_tags=post_tags)
+
+
+#  Views for Game Model
+@control_panel.route('/games')
+@login_required
+def games_list():
+    games = db.select(Game).order_by(Game._title.desc())
+    page = db.paginate(games)
+    return render_template('control_panel/games_list.html', page=page)
+
+
+@control_panel.route('/add-game', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def add_game():
+    form = AddGameForm()
+
+    if form.validate_on_submit():
+        game = Game(title=form.title.data, producer=form.producer.data, release_date=form.release_date.data,
+                    body=form.body.data, web_link=form.web_link.data, steam_link=form.steam_link.data,
+                    twitter_link=form.twitter_link.data, fb_link=form.fb_link.data, reddit_link=form.reddit_link.data,
+                    discord_link=form.discord_link.data, published=form.published.data)
+        f = form.thumb.data
+        thumb_name = upload_img(f, game.slug)
+        game.thumb_name = thumb_name
+
+        db.session.add(game)
+        db.session.commit()
+        flash("Gra została dodana.")
+        return redirect(url_for('.games_list_panel'))
+    else:
+        print(form.errors)
+    return render_template('control_panel/add_game.html', form=form)
+
+
+@control_panel.route('/edit-game/<int:id>', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def edit_game(id):
+    form = EditGameForm()
+    game = db.get_or_404(Game, id)
+
+    if form.validate_on_submit():
+        if form.thumb.data:
+            thumb_name = upload_img(form.thumb.data, game.slug)
+            game.thumb_name = thumb_name
+
+        game.title = form.title.data
+        game.producer = form.producer.data
+        game.release_date = form.release_date.data
+        game.body = form.body.data
+        game.published = form.published.data
+        db.session.add(game)
+        db.session.commit()
+        flash('Gra została zaktualizowana.')
+        return redirect(url_for('.games_list_panel'))
+
+    form.title.data = game.title
+    form.producer.data = game.producer
+    form.release_date.data = game.release_date
+    form.body.data = game.body
+    form.published.data = game.published
+    return render_template('control_panel/add_game.html', form=form, thumb=game.thumb_name)
+
+
+@control_panel.route('/delete-game/<int:id>')
+@admin_required
+@login_required
+def delete_game(id):
+    game = db.get_or_404(Game, id)
+    db.session.delete(game)
+    db.session.commit()
+    flash('Gra została usunięta.')
+    return redirect(url_for('.games_list_panel'))
+
+
+@control_panel.route('/show-game/<int:id>')
+@login_required
+def show_game(id):
+    game = db.get_or_404(Game, id)
+    return render_template('main/game.html', game=game)
+
+
+# Views for Tag Model
+@control_panel.route('/tags')
+@login_required
+def tags_list():
+    tags = db.select(Tag).order_by(Tag._name.desc())
+    page = db.paginate(tags)
+    return render_template('control_panel/tags_list.html', page=page)
+
+
+@control_panel.route('/add-tag/', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def add_tag():
+    form = AddTagForm()
+    if form.validate_on_submit():
+        tag = Tag(name=form.name.data)
+        db.session.add(tag)
+        db.session.commit()
+        flash('Tag został dodany.')
+        return redirect(url_for('.tags_list'))
+    return render_template('control_panel/add_tag.html', form=form)
+
+
+@control_panel.route('/edit-tag/<int:id>', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def edit_tag(id):
+    form = EditTagForm()
+    tag = db.get_or_404(Tag, id)
+    if form.validate_on_submit():
+        tag._name = form.name.data
+        db.session.add(tag)
+        db.session.commit()
+        flash('Tag został zaktualizowany.')
+        return redirect(url_for('.tags_list'))
+    form.name.data = tag.name
+    return render_template('control_panel/add_tag.html', form=form)
+
+
+@control_panel.route('/delete-tag/<int:id>')
+@admin_required
+@login_required
+def delete_tag(id):
+    tag = db.get_or_404(Tag, id)
+    db.session.delete(tag)
+    db.session.commit()
+    flash('Tag został usunięty.')
+    return redirect(url_for('.tags_list'))
+
+
+# Views for Community Model
+@control_panel.route('/communities')
+@login_required
+def communities_list():
+    communities = db.select(Community).order_by(Community._title.desc())
+    page = db.paginate(communities)
+    return render_template('control_panel/communities_list.html', page=page)
+
+
+@control_panel.route('/add-community', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def add_community():
+    form = AddCommunityForm()
+    if form.validate_on_submit():
+        community = Community(title=form.name.data, body=form.body.data, game=Game.query.get(form.game.data),
+                              web_link=form.web_link.data, twitter_link=form.twitter_link.data,
+                              discord_link=form.discord_link.data, fb_link=form.fb_link.data, published=form.published.data)
+
+        f = form.thumb.data
+        logo = upload_img(f, community.slug_title, type="logo")
+        community.thumb_name = logo
+
+        db.session.add(community)
+        db.session.commit()
+        flash("Społeczność została dodana.")
+        return redirect(url_for('.communities_list'))
+
+    return render_template('control_panel/add_community.html', form=form)
+
+
+@control_panel.route('/edit-community/<int:id>', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def edit_community(id):
+    community = db.get_or_404(Community, id)
+    form = EditCommunityForm()
+
+    if form.validate_on_submit():
+        community.title = form.name.data
+        community.body = form.body.data
+        community.game = Game.query.get(form.game.data)
+        community.web_link = form.web_link.data
+        community.twitter_link = form.twitter_link.data
+        community.discord_link = form.discord_link.data
+        community.fb_link = form.fb_link.data
+        community.published = form.published.data
+
+        if form.thumb.data:
+            thumb_name = upload_img(form.thumb.data, community.slug)
+            community.thumb_name = thumb_name
+
+        db.session.add(community)
+        db.session.commit()
+        flash("Społeczność została zaktualizowana.")
+        return redirect(url_for('.communities_list'))
+
+    form.name.data = community.title
+    form.body.data = community.body
+    form.game.data = community.game_id
+    form.web_link.data = community.web_link
+    form.twitter_link.data = community.twitter_link
+    form.discord_link.data = community.discord_link
+    form.fb_link.data = community.fb_link
+    form.published.data = community.published
+
+    return render_template('control_panel/add_community.html', form=form)
+
+
+@control_panel.route('/delete-community/<int:id>')
+@admin_required
+@login_required
+def delete_community(id):
+    community = db.get_or_404(Community, id)
+    db.session.delete(community)
+    db.session.commit()
+    flash('Społeczność została usunięta.')
+    return redirect(url_for('.communities_list'))
+
+
+@control_panel.route('/show-community/<int:id>')
+@login_required
+def show_community(id):
+    community = db.get_or_404(Community, id)
+    return render_template('main/community.html', community=community)
+
+
+@control_panel.route('/edit-about-us/')
+@content_editor_required
+@login_required
+def edit_about_us():
+    about = db.session.execute(db.select(About)).scalar_one_or_none()
+    form = EditAboutUs()
+
+    if form.validate_on_submit():
+        about.body = form.body.data
+        db.session.add(about)
+        db.session.commit()
+
+    if about:
+        form.body.data = about.body
+
+    flash('"O nas" zostało zaktualizowane.')
+    return render_template('control_panel/edit_about_us.html', form=form)

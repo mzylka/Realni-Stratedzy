@@ -1,0 +1,6 @@
+venv/
+files/cke_images/**
+files/logos/**
+files/thumbnails/**
+app/static/node_modules/
+__pycache__/

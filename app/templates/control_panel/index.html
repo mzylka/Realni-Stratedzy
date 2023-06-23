@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Panel kontrolny - {% endblock %}
+{% block content %}
+<div class="flex bg-gray-800 px-6 py-6">
+    <div class="bg-gray-700">
+        <a class="block" href="{{ url_for('.posts_list') }}">
+            <h3>Posty</h3>
+            <p>Lista postów i związane z nimi akcje</p>
+        </a>
+    </div>
+    <div class="my-4">
+        <a class="block" href="{{ url_for('.tags_list') }}">
+        <h3>Tagi</h3>
+        <p>Lista tagów</p>
+        </a>
+    </div>
+    <div class="my-4">
+        <a class="block" href="{{ url_for('.games_list') }}">
+            <h3>Gry</h3>
+            <p>Lista gier i związane z nimi akcje</p>
+        </a>
+    </div>
+    <div class="my-4">
+        <a class="block" href="{{ url_for('.users') }}">
+            <h3>Użytkownicy</h3>
+            <p>Lista użytkowników i związane z nimi akcje</p>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    {%block meta%}{% endblock %}
+    <title>{% block title %}{% endblock %}Realni Stratedzy</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/style.css', _external=True) }}">
+</head>
+<body class="box-border bg-gray-700 text-stone-50">
+    {% block header %}
+    {% include "header.html" %}
+    {% endblock %}
+
+    <main class="min-h-screen max-w-7xl mx-auto mt-4">
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="sidebar">
+            {% block sidebar %}
+            {% endblock %}
+        </div>
+    </main>
+
+    {% block footer %}
+    {% include "footer.html" %}
+    {% endblock %}
+
+    {% block scripts %}
+    {{ moment.include_moment() }}
+    {{ moment.locale("pl") }}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Lista gier(Panel) - {% endblock %}
+{% import "_macros.html" as macros %}
+{% block content %}
+<div class="flex bg-gray-800 px-6 py-6">
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div><h2>Lista gier</h2></div>
+    <div><a href="{{ url_for('.add_game') }}">Dodaj grę</a></div>
+    {% if page %}
+    {% for game in page %}
+    <div class="game mx-4">
+        <h3>{{ game.title }}</h3>
+        <p>{{ game.producer }}</p>
+        {% if current_user.is_administrator() %}
+        <div><a href="{{ url_for('.edit_game', id=game.id) }}">Edytuj grę</a></div>
+        <div><a href="{{ url_for('.show_game', id=game.id) }}">Podejrzyj grę</a></div>
+        <div><a href="{{ url_for('.delete_game', id=game.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz usunąć grę?');">Usuń grę</a></div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {{ macros.render_pagination(page, '.games_list') }}
+</div>
+{% endblock %}

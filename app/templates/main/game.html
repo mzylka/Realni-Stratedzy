@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ game.title }} - {% endblock %}
+{% block content %}
+<div class="base-content flex-col bg-gray-800 px-6 py-6">
+  <div class="base-content__thumb"><img src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title }}"></div>
+  <div class="base-content__title">{{ game.title }}</div>
+  <div class="game-producer">{{ game.producer }}</div>
+  <div class="game-release-date">{% if game.release_date %}{{ game.release_date }}{% endif %}</div>
+  <div class="base=content__body">{{ game.body | safe }}</div>
+  <div class="base-content__links">
+    {% if game.web_link %}
+    <a href="{{ game.web_link }}">Strona internetowa</a>
+    {% endif %}
+    {% if game.steam_link %}
+    <a href="{{ game.steam_link }}">Steam</a>
+    {% endif %}
+    {% if game.discord_link %}
+    <a href="{{ game.web_link }}">Discord</a>
+    {% endif %}
+    {% if game.fb_link %}
+    <a href="{{ game.web_link }}">Facebook</a>
+    {% endif %}
+    {% if game.twitter_link %}
+    <a href="{{ game.web_link }}">Twitter</a>
+    {% endif %}
+    {% if game.reddit_link %}
+    <a href="{{ game.web_link }}">Reddit</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

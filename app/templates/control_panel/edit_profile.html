@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Edytuj {{ user.username }} - {% endblock %}
+{% block content %}
+<div class="bg-gray-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <div>
+        {% for err in form.username.errors %}
+            <div><span>{{ err }}</span></div>
+        {% endfor %}
+        {% for err in form.email.errors %}
+            <div><span>{{ err }}</span></div>
+        {% endfor %}
+    </div>
+
+    <form method="POST">
+    <div class="form-group mb-6">
+      {{ form.hidden_tag() }}
+      {% if form.email %}
+        {{ form.email.label }} {{ form.email(class='') }}
+      {% endif %}
+      {% if form.username %}
+        {{ form.username.label }} {{ form.username(class='') }}
+      {% endif %}
+      {% if form.role %}
+        {{ form.role.label }} {{ form.role() }} <br>
+      {% endif %}
+      {{ form.submit(class='') }}
+    </div>
+  </form>
+
+</div>
+{% endblock %}

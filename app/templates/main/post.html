@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} - {% endblock %}
+{% block content %}
+<div class="flex-col bg-gray-800 px-6 py-6">
+    <div class="post-thumb"><img src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title }}"></div>
+    <div class="post-title">{{ post.title }}</div>
+    <div class="post-date">{{ moment(post.timestamp).format('LLL') }}</div>
+    <div class="post-body">{{ post.body | safe }}</div>
+    <div class="post-author">{{ post.author.username }}</div>
+    <div class="post-tags">
+        {% for tag in post.tags %}
+        <a class="post-tag" href="{{ url_for('main.tag', slug=tag.slug) }}">{{ tag.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

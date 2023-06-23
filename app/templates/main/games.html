@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="games">
+    {% for game in games %}
+    <article class="game bg-gray-800 px-6 py-6">
+        <a class="game__link" href="{{ url_for('.game', slug=game.slug) }}">
+            <div class="game__thumb_block">
+                <img src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}" style="width: 300px">
+            </div>
+            <div class="game__desc_block">
+                <h3>{{ game.title }}</h3>
+            </div>
+        </a>
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}

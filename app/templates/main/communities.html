@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="communities">
+    {% for community in communities %}
+    <article class="community bg-gray-800 px-6 py-6">
+        <a class="community__link" href="{{ url_for('.community', slug=community.slug) }}">
+            <div class="community__thumb_block">
+                <img src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title + 'thumb' }}" style="width: 300px">
+            </div>
+            <div class="community__desc_block">
+                <h3>{{ community.title }}</h3>
+            </div>
+        </a>
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}

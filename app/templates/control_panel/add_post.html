@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Dodaj post - {% endblock %}
+{% block content %}
+<div class="users bg-gray-800 px-6 py-6">
+    <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
+        <div class="">
+            {{ form.hidden_tag() }}
+            {{ form.thumb }}
+            {% if thumb %}
+            <p>Aktualna miniaturka:</p>
+            <img class="block max-w-full" src="{{ url_for('uploaded_files', folder='thumbnails', filename=thumb) }}" alt="">
+            {% endif %}
+            <div>
+                <p>Tytuł:</p>
+                {{ form.title(placeholder="Tytuł", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div>
+                <p>Krótki opis:</p>
+                {{ form.short_desc(placeholder="Krótki opis", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div>
+                <p>Treść:</p>
+                {{ form.body(placeholder="Body", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div>
+                <p>Dotyczy gry:</p>
+                {{ form.game(placeholder="Gra", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div>
+                <p>Tagi:</p>
+                <span class="block">Odzielaj tagi przecinkiem bez spacji (np. tag1,tag2,tag3)</span>
+                {{ form.tags(placeholder="Tagi", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div>
+                <p>Opublikowany: </p>
+                {{ form.published }}
+            </div>
+            <div class="mx-auto">{{ form.submit(class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='body', height=700) }}
+{% endblock %}
