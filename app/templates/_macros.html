@@ -5,18 +5,18 @@
       &laquo;
     </a>
   </div>
-  <div class="pagination-main grow p-2 mx-auto">
-    {% if pagination.has_prev %}
-    <a href="{{ url_for(endpoint, page = pagination.page - 1) }}">
-      {{ pagination.prev_num }}
-    </a>
-    {% endif %}
-    <strong>{{ pagination.page }}</strong>
-    {% if pagination.has_next %}
-    <a href="{{ url_for(endpoint, page = pagination.page + 1) }}">
-      {{ pagination.next_num }}
-    </a>
-    {% endif %}
+  <div class="pagination-main flex justify-center content-center grow p-2">
+      {% if pagination.has_prev %}
+      <a class="m-1 p-1" href="{{ url_for(endpoint, page = pagination.page - 1) }}">
+        {{ pagination.prev_num }}
+      </a>
+      {% endif %}
+      <strong class="m-1 p-1">{{ pagination.page }}</strong>
+      {% if pagination.has_next %}
+      <a class="m-1 p-1" href="{{ url_for(endpoint, page = pagination.page + 1) }}">
+        {{ pagination.next_num }}
+      </a>
+      {% endif %}
   </div>
   <div class="pagination-right p-2 m-2">
     <a href="{% if pagination.has_next %}{{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
