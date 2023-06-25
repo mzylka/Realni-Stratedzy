@@ -1,11 +1,11 @@
 {% macro render_pagination(pagination, endpoint) %}
-<div class="pagination">
-  <div class="pagination-left">
+<div class="pagination flex bg-gray-800 rounded-lg my-4">
+  <div class="pagination-left p-2 m-2">
     <a href="{% if pagination.has_prev %}{{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}">
       &laquo;
     </a>
   </div>
-  <div class="pagination-main">
+  <div class="pagination-main grow p-2 mx-auto">
     {% if pagination.has_prev %}
     <a href="{{ url_for(endpoint, page = pagination.page - 1) }}">
       {{ pagination.prev_num }}
@@ -18,7 +18,7 @@
     </a>
     {% endif %}
   </div>
-  <div class="pagination-right">
+  <div class="pagination-right p-2 m-2">
     <a href="{% if pagination.has_next %}{{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
       &raquo;
     </a>

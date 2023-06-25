@@ -6,17 +6,17 @@
     <title>{% block title %}{% endblock %}Realni Stratedzy</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/style.css', _external=True) }}">
 </head>
-<body class="box-border bg-gray-700 text-stone-50">
+<body class="box-border bg-gray-700 text-stone-100">
     {% block header %}
     {% include "header.html" %}
     {% endblock %}
 
     <main class="min-h-screen max-w-7xl mx-auto mt-4">
-        <div class="content">
+        <div class="content px-2">
             {% block content %}
             {% endblock %}
         </div>
-        <div class="sidebar">
+        <div class="sidebar hidden">
             {% block sidebar %}
             {% endblock %}
         </div>
