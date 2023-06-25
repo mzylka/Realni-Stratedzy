@@ -12,7 +12,7 @@ def index():
 
     if not searched:
         posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp)
-        page = db.paginate(posts, per_page=1)
+        page = db.paginate(posts, per_page=2)
     else:
         posts = db.select(Post).filter_by(published=True).where(Post.body.contains(searched))
         page = db.paginate(posts)
