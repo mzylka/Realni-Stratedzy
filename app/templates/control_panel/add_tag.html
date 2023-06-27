@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Dodaj grę - {% endblock %}
 {% block content %}
-<div class="users bg-gray-800 px-6 py-6">
+<div class="bg-gray-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div class="">
             {{ form.hidden_tag() }}
             <div>
-                <p>Nazwa gry:</p>
+                <p>Nazwa tagu:</p>
                 {{ form.name(placeholder="Nazwa tagu", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
             </div>
             <div class="mx-auto">{{ form.submit(placeholder="Dodaj tag", class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>

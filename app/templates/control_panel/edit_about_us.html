@@ -1,14 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Edytuj O nas - {% endblock %}
 {% block content %}
 <div class="bg-gray-800 px-6 py-6">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <ul class=flashes>
+    <ul class="flashes">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
     </ul>
     {% endif %}
     {% endwith %}
+    <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
+        <div class="">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.body(class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div class="mx-auto">{{ form.submit(placeholder="Edytuj O Nas", class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+        </div>
+    </form>
 
 </div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
+{{ ckeditor.config(name='body', height=700) }}
 {% endblock %}

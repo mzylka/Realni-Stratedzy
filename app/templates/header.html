@@ -12,9 +12,9 @@
         </div>
         <nav class="header__menu">
             <div class="header_links md:flex">
-                <a class="block">O nas</a>
-                <a class="block">Lista gier RTS</a>
-                <a class="block">Społeczności/Klany</a>
+                <a class="block" href="{{ url_for('main.about_us') }}">O nas</a>
+                <a class="block" href="{{ url_for('main.games') }}">Lista gier RTS</a>
+                <a class="block" href="{{ url_for('main.communities') }}">Społeczności/Klany</a>
             </div>
             <div class="header_control">
                 {% if current_user.is_administrator() %}

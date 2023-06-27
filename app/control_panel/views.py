@@ -392,7 +392,7 @@ def show_community(id):
     return render_template('main/community.html', community=community)
 
 
-@control_panel.route('/edit-about-us/')
+@control_panel.route('/edit-about-us/', methods=['GET', 'POST'])
 @content_editor_required
 @login_required
 def edit_about_us():
@@ -400,12 +400,15 @@ def edit_about_us():
     form = EditAboutUs()
 
     if form.validate_on_submit():
-        about.body = form.body.data
+        if not about:
+            about = About(body=form.body.data)
+        else:
+            about.body = form.body.data
         db.session.add(about)
         db.session.commit()
+        flash('"O nas" zostało zaktualizowane.')
 
     if about:
         form.body.data = about.body
 
-    flash('"O nas" zostało zaktualizowane.')
     return render_template('control_panel/edit_about_us.html', form=form)
