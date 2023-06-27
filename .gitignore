@@ -5,3 +5,4 @@ files/thumbnails/**
 app/static/node_modules/
 __pycache__/
 data-dev.sqlite
+.env
