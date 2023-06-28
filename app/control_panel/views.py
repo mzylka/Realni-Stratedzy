@@ -113,6 +113,7 @@ def edit_post(id):
             thumb_name = upload_img(form.thumb.data, post.slug)
             post.thumb_name = thumb_name
         post.title = form.title.data
+        post.short_desc = form.short_desc.data
         post.body = form.body.data
         post.game = Game.query.get(form.game.data)
         post.published = form.published.data

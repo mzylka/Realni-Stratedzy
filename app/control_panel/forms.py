@@ -106,5 +106,5 @@ class EditAboutUs(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    text = StringField("Szukaj", validators=[Length(1, 128)])
-    submit = SubmitField('Szukaj')
+    text = StringField('Szukaj', validators=[Length(1, 128)])
+    submit = SubmitField('Dupa')

@@ -11,12 +11,12 @@
     {% include "header.html" %}
     {% endblock %}
 
-    <main class="min-h-screen max-w-7xl mx-auto mt-4">
-        <div class="content px-2">
+    <main class="min-h-screen max-w-7xl mx-auto mt-4 lg:flex">
+        <div class="content lg:grow px-2">
             {% block content %}
             {% endblock %}
         </div>
-        <div class="sidebar hidden">
+        <div class="sidebar hidden lg:block w-1/4 p-2">
             {% block sidebar %}
             {% endblock %}
         </div>

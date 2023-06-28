@@ -1,42 +1,38 @@
 <header class="bg-gray-800">
-    <div class="md:flex relative max-w-7xl mx-auto px-4">
+    <div class="lg:flex relative max-w-7xl mx-auto px-4">
         <div class="header__logo flex flex-row items-center py-2">
             <a class="block" href="{{url_for('main.index')}}">
                 <img class="block" id="logo" src="{{url_for('static', filename='images/header.png')}}" alt="Logo">
             </a>
-            <div class="header__bars md:hidden p-1 ml-auto cursor-pointer">
+            <div class="header__bars lg:hidden p-1 ml-auto cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 </svg>
             </div>
         </div>
-        <nav class="header__menu">
-            <div class="header_links md:flex">
-                <a class="block" href="{{ url_for('main.about_us') }}">O nas</a>
-                <a class="block" href="{{ url_for('main.games') }}">Lista gier RTS</a>
-                <a class="block" href="{{ url_for('main.communities') }}">Społeczności/Klany</a>
+        <nav class="header__menu hidden lg:flex lg:grow lg:content-stretch lg:items-center lg:ml-4 font-semibold">
+            <div class="header_links lg:flex lg:grow items-center">
+                <a class="block lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.about_us') }}">O nas</a>
+                <a class="block lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.games') }}">Lista gier RTS</a>
+                <a class="block lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.communities') }}">Społeczności/Klany</a>
             </div>
-            <div class="header_control">
-                {% if current_user.is_administrator() %}
-                <a href="{{url_for('control_panel.index')}}">Panel Kontrolny</a>
-                {% endif %}
+            <div class="header__search">
+                <form class="flex items-center" method="POST" action="{{url_for('main.search')}}">
+                    {{ search_form.hidden_tag() }}
+                    {{ search_form.searched(class="rounded w-44", placeholder="Szukaj") }}
+                    <button type="submit" class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </button>
+                </form>
             </div>
-            <div class="header_logout">
-                {% if current_user.is_authenticated %}
-                <a href="{{url_for('control_panel.auth.logout')}}">Wyloguj</a>
-                {% endif %}
-            </div>
-            <div class="header_auth">
+            <div class="header__user flex flex-col">
                 {% if current_user.is_authenticated %}
                 <span>Zalogowany jako {{ current_user.username }}</span>
+                <a class="transition hover:text-sky-400" href="{{url_for('control_panel.index')}}">Panel Kontrolny</a>
+                <a class="transition hover:text-sky-400" href="{{url_for('control_panel.auth.logout')}}">Wyloguj</a>
                 {% endif %}
-            </div>
-            <div class="header_search">
-                <form method="POST" action="{{url_for('main.search')}}">
-                    {{ search_form.hidden_tag() }}
-                    {{ search_form.searched() }}
-                    {{ search_form.submit() }}
-                </form>
             </div>
         </nav>
     </div>
