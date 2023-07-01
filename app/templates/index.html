@@ -13,7 +13,7 @@
             </a>
         </div>
         <div class="post__desc_block p-2">
-            <h3 class="font-semibold text-lg uppercase">{{ post.title }}</h3>
+            <h3 class="font-semibold text-lg uppercase"><a class="hover:text-sky-400 transition-colors" href="{{ url_for('.post', slug=post.slug) }}">{{ post.title }}</a></h3>
             <p class="text-xs text-gray-400 mt-1">{{ moment(post.timestamp).format('LL') }}</p>
             <p class="block mt-2">{{ post.short_desc }}</p>
         </div>
