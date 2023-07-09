@@ -11,8 +11,8 @@ def index():
     page = None
 
     if not searched:
-        posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp)
-        page = db.paginate(posts, per_page=2)
+        posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp.desc())
+        page = db.paginate(posts)
     else:
         posts = db.select(Post).filter_by(published=True).where(Post.body.contains(searched))
         page = db.paginate(posts)
@@ -60,9 +60,10 @@ def games():
 @main.route('/tag/<slug>')
 def tag(slug):
     tag = db.session.execute(db.select(Tag).filter_by(slug_name=slug)).scalar_one_or_none()
+    page= db.paginate(tag.posts)
     if not tag:
         abort(404)
-    return render_template('index.html', posts=tag.posts)
+    return render_template('index.html', page=page)
 
 
 #  Community page

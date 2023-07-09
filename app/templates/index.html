@@ -8,8 +8,8 @@
     {% for post in page %}
     <article class="post bg-gray-800 pb-6 rounded-lg shadow-md overflow-hidden max-w-md my-6 mx-auto lg:flex lg:max-w-full lg:p-2">
         <div class="post__thumb_block">
-            <a class="post__link block" href="{{ url_for('.post', slug=post.slug) }}">
-                <img class="block w-full lg:w-80 lg:max-w-none object-cover" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title + 'thumb' }}">
+            <a class="post__link block lg:w-80" href="{{ url_for('.post', slug=post.slug) }}">
+                <img class="block w-full object-contain lg:max-h-48" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title + 'thumb' }}">
             </a>
         </div>
         <div class="post__desc_block p-2">
@@ -21,10 +21,4 @@
     {% endfor %}
 </div>
 {{ macros.render_pagination(page, '.index') }}
-
-
-{% endblock %}
-
-{% block sidebar %}
-{% include "sidebar.html" %}
 {% endblock %}
