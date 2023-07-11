@@ -2,7 +2,7 @@
 {% import "_macros.html" as macros %}
 {% block title %}Lista postów(Panel) - {% endblock %}
 {% block meta %}<meta name="robots" content="noindex">{% endblock %}
-{% block content %}
+{% block main %}
 <div class="flex-col bg-gray-800 px-6 py-6">
     {% with messages = get_flashed_messages() %}
     {% if messages %}

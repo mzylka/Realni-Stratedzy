@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Lista gier(Panel) - {% endblock %}
 {% import "_macros.html" as macros %}
-{% block content %}
-<div class="flex bg-gray-800 px-6 py-6">
+{% block main %}
+<div class="flex-col bg-gray-800 px-6 py-6">
     <div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}

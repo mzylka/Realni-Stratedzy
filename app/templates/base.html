@@ -29,16 +29,20 @@
     {% include "header.html" %}
     {% endblock %}
 
-    <main class="min-h-screen max-w-7xl mx-auto mt-4 lg:flex">
-        <div class="content lg:grow px-2 lg:w-3/4">
-            {% block content %}
-            {% endblock %}
+    <main class="min-h-screen max-w-7xl mx-auto mt-6 px-2">
+        {% block main %}
+        <div class="lg:flex">
+            <div class="content lg:grow lg:w-3/4">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <aside class="sidebar hidden lg:block w-1/4 ml-2">
+                {% block sidebar %}
+                {% include "sidebar.html" %}
+                {% endblock %}
+            </aside>
         </div>
-        <aside class="sidebar hidden lg:block w-1/4 p-2 mt-3">
-            {% block sidebar %}
-            {% include "sidebar.html" %}
-            {% endblock %}
-        </aside>
+        {% endblock %}
     </main>
 
     {% block footer %}

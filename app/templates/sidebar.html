@@ -1,14 +1,21 @@
+{% if current_user.is_authenticated %}
+<div class="sidebar__user mb-2 bg-gray-800 rounded p-1">
+    <span class="block">Zalogowany jako: {{ current_user.username }}</span>
+    <a class="block transition hover:text-sky-400" href="{{url_for('control_panel.index')}}">Panel Kontrolny</a>
+    <a class="block transition hover:text-sky-400" href="{{url_for('control_panel.auth.logout')}}">Wyloguj</a>
+</div>
+{% endif %}
 <div class="sidebar__games">
   <div><h4 class="font-semibold text-lg">Ostatnio dodane gry</h4></div>
   {% for game in games_side %}
-  <div class="bg-gray-800 mt-1 p-1 rounded"><a class="block transition hover:text-sky-400" href="{{ url_for('.game', slug=game.slug) }}">{{ game.title }}</a></div>
+  <div class="bg-gray-800 mt-1 p-1 rounded"><a class="block transition hover:text-sky-400" href="{{ url_for('main.game', slug=game.slug) }}">{{ game.title }}</a></div>
   {% endfor %}
 </div>
 <div class="sidebar__tags mt-6">
   <h4 class="font-semibold text-lg">Popularne tagi</h4>
   <div class="sidebar__tags-block flex flex-wrap mt-1">
     {% for tag in tags %}
-    <div class="bg-gray-800 rounded mr-1 p-1"><a class="transition hover:text-sky-400" href="{{ url_for('.tag', slug=tag.slug_name) }}">{{ tag[0] }}</a></div>
+    <div class="bg-gray-800 rounded mr-1 p-1"><a class="transition hover:text-sky-400" href="{{ url_for('main.tag', slug=tag.slug_name) }}">{{ tag[0] }}</a></div>
     {% endfor %}
   </div>
 </div>

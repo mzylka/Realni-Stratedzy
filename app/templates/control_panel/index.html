@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Panel kontrolny - {% endblock %}
-{% block content %}
+{% block main %}
 <div class="flex flex-wrap bg-gray-800 px-6 py-6">
     <div class="m-4 p-2 bg-gray-700 rounded-lg">
         <a class="block" href="{{ url_for('.posts_list') }}">
@@ -40,4 +40,5 @@
     </div>
 
 </div>
+
 {% endblock %}

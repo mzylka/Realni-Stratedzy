@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Konto {{ user.username }} - {% endblock %}
-{% block content %}
+{% block main %}
 <div class="bg-gray-800 px-6 py-6">
     <h2>{{ user.username }} {% if user.is_administrator() %}[ADMIN]{% endif %}</h2>
     <p>Dołączył: {{ moment(user.last_seen).format('L') }}</p>
