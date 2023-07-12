@@ -6,7 +6,7 @@
     <div class="post__title text-2xl lg:text-3xl my-3"><h1>{{ post.title }}</h1></div>
     <div class="post__date mt-3"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
     <div class="post__author"><p>Autor: {{ post.author.username }}</p></div>
-    <div class="post__body text-lg my-3">{{ post.body | safe }}</div>
+    <div class="post__body lg:text-lg my-3">{{ post.body | safe }}</div>
     <div class="post__tags-desc"><span>Tagi:</span></div>
     <div class="post__tags mt-1 flex flex-wrap">
         {% for tag in post.tags %}

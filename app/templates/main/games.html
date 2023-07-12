@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% import "_macros.html" as macros %}
 {% block content %}
 <div class="games">
-    {% for game in games %}
-    <article class="game bg-gray-800 px-6 py-6">
-        <a class="game__link" href="{{ url_for('.game', slug=game.slug) }}">
+    {% for game in page %}
+    <article class="game max-h-28 bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full p-1 lg:p-2">
+        <a class="game__link w-full flex items-center" href="{{ url_for('.game', slug=game.slug) }}">
             <div class="game__thumb_block">
-                <img src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}" style="width: 300px">
+                <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}">
             </div>
-            <div class="game__desc_block">
-                <h3>{{ game.title }}</h3>
+            <div class="game__desc_block ml-4">
+                <h3 class="text-xl font-semibold">{{ game.title }}</h3>
             </div>
         </a>
     </article>

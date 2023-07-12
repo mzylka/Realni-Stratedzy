@@ -52,15 +52,16 @@ def game(slug):
 #  Games list
 @main.route('/gry/')
 def games():
-    games = db.session.execute(db.select(Game).filter_by(published=True).order_by(Game._title.desc())).scalars()
-    return render_template('main/games.html', games=games)
+    games = db.select(Game).filter_by(published=True).order_by(Game._title)
+    page = db.paginate(games)
+    return render_template('main/games.html', page=page)
 
 
 #  Posts list filtered by tag
 @main.route('/tag/<slug>')
 def tag(slug):
     tag = db.session.execute(db.select(Tag).filter_by(slug_name=slug)).scalar_one_or_none()
-    page= db.paginate(tag.posts)
+    page = db.paginate(tag.posts)
     if not tag:
         abort(404)
     return render_template('index.html', page=page)

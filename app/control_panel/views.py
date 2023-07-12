@@ -202,7 +202,7 @@ def add_game():
         db.session.add(game)
         db.session.commit()
         flash("Gra została dodana.")
-        return redirect(url_for('.games_list_panel'))
+        return redirect(url_for('.games_list'))
     else:
         print(form.errors)
     return render_template('control_panel/add_game.html', form=form)
@@ -228,7 +228,7 @@ def edit_game(id):
         db.session.add(game)
         db.session.commit()
         flash('Gra została zaktualizowana.')
-        return redirect(url_for('.games_list_panel'))
+        return redirect(url_for('.games_list'))
 
     form.title.data = game.title
     form.producer.data = game.producer
@@ -246,7 +246,7 @@ def delete_game(id):
     db.session.delete(game)
     db.session.commit()
     flash('Gra została usunięta.')
-    return redirect(url_for('.games_list_panel'))
+    return redirect(url_for('.games_list'))
 
 
 @control_panel.route('/show-game/<int:id>')
