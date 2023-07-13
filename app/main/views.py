@@ -52,9 +52,10 @@ def game(slug):
 #  Games list
 @main.route('/gry/')
 def games():
+    textfield = db.session.execute(db.select(Textfield).filter_by(name='games_page')).scalar_one_or_none()
     games = db.select(Game).filter_by(published=True).order_by(Game._title)
     page = db.paginate(games)
-    return render_template('main/games.html', page=page)
+    return render_template('main/games.html', page=page, description=textfield.body)
 
 
 #  Posts list filtered by tag

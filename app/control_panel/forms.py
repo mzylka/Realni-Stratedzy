@@ -107,7 +107,7 @@ class EditAboutUs(FlaskForm):
 
 class EditTextfield(FlaskForm):
     body = TextAreaField('Treść', validators=[DataRequired()])
-    submit = SubmitField('Edytuj o nas')
+    submit = SubmitField('Edytuj')
 
 
 class SearchForm(FlaskForm):
