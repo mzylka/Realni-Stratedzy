@@ -218,7 +218,7 @@ class Community(BaseDataModel):
 
 
 class Textfield(db.Model):
-    __tablename__ = 'about'
+    __tablename__ = 'textfields'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), index=True)
     body = db.Column(db.Text)

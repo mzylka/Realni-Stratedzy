@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from .. import db
 from ..models import Role, User, Post, Game, Tag, Community, Textfield
-from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs
+from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs, EditTextfield
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
 from ..helpers import upload_img
@@ -397,7 +397,7 @@ def show_community(id):
 @content_editor_required
 @login_required
 def edit_about_us():
-    about = db.session.execute(db.select(Textfield)).scalar_one_or_none()
+    about = db.session.execute(db.select(Textfield).filter_by(name='about_us')).scalar_one_or_none()
     form = EditAboutUs()
 
     if form.validate_on_submit():
@@ -413,3 +413,21 @@ def edit_about_us():
         form.body.data = about.body
 
     return render_template('control_panel/edit_about_us.html', form=form)
+
+
+@control_panel.route('/edit-textfield/<field>', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def edit_textfield(field):
+    textfield = db.session.execute(db.select(Textfield).filter_by(name=field)).scalar_one_or_none()
+    form = EditTextfield()
+
+    if form.validate_on_submit():
+        textfield.body = form.body.data
+        db.session.add(textfield)
+        db.session.commit()
+        flash(f'Pole {field} zostało zaktualizowane.')
+
+    form.body.data = textfield.body
+
+    return render_template('control_panel/edit_textfield.html', form=form, field_name=textfield.name)

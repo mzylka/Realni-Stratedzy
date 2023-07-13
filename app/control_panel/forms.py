@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed, FileSize
-from wtforms import StringField, SelectField, SubmitField, DateField, BooleanField
+from wtforms import StringField, SelectField, SubmitField, DateField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, Regexp, ValidationError, Optional
 from .. import db
 from ..models import User, Role, Game
@@ -102,6 +102,11 @@ class EditCommunityForm(AddCommunityForm):
 
 class EditAboutUs(FlaskForm):
     body = CKEditorField('Treść', validators=[DataRequired()])
+    submit = SubmitField('Edytuj o nas')
+
+
+class EditTextfield(FlaskForm):
+    body = TextAreaField('Treść', validators=[DataRequired()])
     submit = SubmitField('Edytuj o nas')
 
 
