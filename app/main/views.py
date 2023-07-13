@@ -79,8 +79,9 @@ def community(slug):
 #  Communities list
 @main.route('/spolecznosci/')
 def communities():
-    communities = db.session.execute(db.select(Community)).scalars()
-    return render_template('main/communities.html', communities=communities)
+    communities = db.select(Community).order_by(Community._title)
+    page = db.paginate(communities)
+    return render_template('main/communities.html', page=page)
 
 
 #  About page
