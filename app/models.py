@@ -76,9 +76,9 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         if self.role is None:
             if self.email == current_app.config['APP_ADMIN']:
-                self.role = db.session.execute(db.select(Role).filter_by(name="Administrator")).scalar_one()
+                self.role = db.session.execute(db.select(Role).filter_by(name='Administrator')).scalar_one()
             if self.role is None:
-                self.role = db.session.execute(db.select(Role).filter_by(name="Content Editor")).scalar_one()
+                self.role = db.session.execute(db.select(Role).filter_by(name='Content Editor')).scalar_one()
 
     @property
     def password(self):
@@ -172,7 +172,7 @@ class Post(BaseDataModel):
 
 
 class Tag(db.Model):
-    __tablename__ = "tags"
+    __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, index=True)
     _name = db.Column(db.String(128), unique=True)
     slug_name = db.Column(db.String(128), index=True)
@@ -193,7 +193,7 @@ class Tag(db.Model):
 
 
 class Game(BaseDataModel):
-    __tablename__ = "games"
+    __tablename__ = 'games'
     id = db.Column(db.Integer, primary_key=True)
     producer = db.Column(db.String(128))
     release_date = db.Column(db.DateTime(), default=None)
@@ -208,7 +208,7 @@ class Game(BaseDataModel):
 
 
 class Community(BaseDataModel):
-    __tablename__ = "communities"
+    __tablename__ = 'communities'
     id = db.Column(db.Integer, primary_key=True)
     web_link = db.Column(db.String(256), default=None)
     discord_link = db.Column(db.String(64), default=None)
@@ -217,8 +217,23 @@ class Community(BaseDataModel):
     game_id = db.Column(db.Integer, db.ForeignKey('games.id'))
 
 
-class About(db.Model):
-    __tablename__ = "about"
+class Textfield(db.Model):
+    __tablename__ = 'about'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
     body = db.Column(db.Text)
+
+    @staticmethod
+    def insert_textfields():
+        textfields = {
+            'about_us': 'Lorem ipsum',
+            'games_page': 'Lorem ipsum',
+            'communities_page': 'Lorem ipsum'
+        }
+        for f in textfields:
+            textfield = db.session.execute(db.select(Textfield).filter_by(name=f)).scalar_one_or_none()
+            if textfield is None:
+                textfield = Textfield(name=f, body=textfields[f])
+            db.session.add(textfield)
+        db.session.commit()
 

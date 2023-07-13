@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, abort
 from .. import db
-from ..models import Post, Game, Tag, Community, About
+from ..models import Post, Game, Tag, Community, Textfield
 from . import main
 from .forms import SearchForm
 
@@ -87,7 +87,7 @@ def communities():
 #  About page
 @main.route('/o-nas/')
 def about_us():
-    about_us = db.session.execute(db.select(About)).scalar_one_or_none()
+    about_us = db.session.execute(db.select(Textfield).filter_by(name='about_us')).scalar_one_or_none()
     return render_template('main/about_us.html', about_us=about_us)
 
 

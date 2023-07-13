@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from .. import db
-from ..models import Role, User, Post, Game, Tag, Community, About
+from ..models import Role, User, Post, Game, Tag, Community, Textfield
 from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
@@ -397,12 +397,12 @@ def show_community(id):
 @content_editor_required
 @login_required
 def edit_about_us():
-    about = db.session.execute(db.select(About)).scalar_one_or_none()
+    about = db.session.execute(db.select(Textfield)).scalar_one_or_none()
     form = EditAboutUs()
 
     if form.validate_on_submit():
         if not about:
-            about = About(body=form.body.data)
+            about = Textfield(body=form.body.data)
         else:
             about.body = form.body.data
         db.session.add(about)

@@ -8,7 +8,7 @@
 <div class="sidebar__games">
   <div><h4 class="font-semibold text-lg">Ostatnio dodane gry</h4></div>
   {% for game in games_side %}
-  <div class="bg-gray-800 mt-1 p-1 rounded"><a class="block transition hover:text-sky-400" href="{{ url_for('main.game', slug=game.slug) }}">{{ game.title }}</a></div>
+  <div class="bg-gray-800 my-2 p-1 rounded"><a class="block transition hover:text-sky-400" href="{{ url_for('main.game', slug=game.slug) }}">{{ game.title }}</a></div>
   {% endfor %}
 </div>
 <div class="sidebar__tags mt-6">

@@ -4,7 +4,7 @@ import sys
 import click
 from dotenv import load_dotenv
 from app import create_app, db
-from app.models import User, Role, Post, Tag, About
+from app.models import User, Role, Post, Tag ,Textfield
 from flask_migrate import Migrate
 from app.models import Permission
 
@@ -22,7 +22,7 @@ migrate = Migrate(app, db)
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Role=Role, Tag=Tag, Post=Post, Permission=Permission, About=About)
+    return dict(db=db, User=User, Role=Role, Tag=Tag, Post=Post, Permission=Permission, Textfield=Textfield)
 
 
 @app.cli.command()
