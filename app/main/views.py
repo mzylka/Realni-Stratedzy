@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, abort
 from .. import db
 from ..models import Post, Game, Tag, Community, Textfield
 from . import main
-from .forms import SearchForm
+from .forms import SearchForm, GamesFilterForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -50,12 +50,36 @@ def game(slug):
 
 
 #  Games list
-@main.route('/gry/')
+@main.route('/gry/', methods=['GET', 'POST'])
 def games():
     textfield = db.session.execute(db.select(Textfield).filter_by(name='games_page')).scalar_one_or_none()
-    games = db.select(Game).filter_by(published=True).order_by(Game._title)
+    form = GamesFilterForm()
+    order_arg = Game._title
+
+    if form.validate_on_submit():
+        if form.filtr.data == 1:
+            order_arg = Game.id.desc()
+        elif form.filtr.data == 2:
+            order_arg = Game._title
+        elif form.filtr.data == 3:
+            order_arg = Game._title.desc()
+        elif form.filtr.data == 4:
+            order_arg = Game.release_date
+        elif form.filtr.data == 5:
+            order_arg = Game.release_date.desc()
+        else:
+            order_arg = Game._title
+
+        print(form.filtr.data)
+        print(order_arg)
+
+        games = db.select(Game).filter_by(published=True).order_by(order_arg)
+        page = db.paginate(games)
+        return render_template('main/games.html', page=page, form=form, description=textfield.body)
+
+    games = db.select(Game).filter_by(published=True).order_by(order_arg)
     page = db.paginate(games)
-    return render_template('main/games.html', page=page, description=textfield.body)
+    return render_template('main/games.html', page=page, form=form, description=textfield.body)
 
 
 #  Posts list filtered by tag

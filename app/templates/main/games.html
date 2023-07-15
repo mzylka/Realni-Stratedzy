@@ -5,6 +5,15 @@
     <div class="game__description">
         {{ description }}
     </div>
+    <div class="game__kurwa">
+        <div class="game__filter">
+            <form class="game__filter-form" method="POST" action="{{ url_for('main.games') }}">
+                {{ form.hidden_tag() }}
+                {{ form.filtr() }}
+                {{ form.submit() }}
+            </form>
+        </div>
+    </div>
     {% for game in page %}
     <article class="game max-h-28 bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full p-1 lg:p-2">
         <a class="game__link w-full flex items-center" href="{{ url_for('.game', slug=game.slug) }}">
