@@ -5,7 +5,7 @@
     <div class="game__description">
         {{ description }}
     </div>
-    <div class="game__kurwa">
+    <div class="game__form_filter">
         <div class="game__filter">
             <form class="game__filter-form" method="POST" action="{{ url_for('main.games') }}">
                 {{ form.hidden_tag() }}

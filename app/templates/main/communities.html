@@ -1,22 +1,36 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros %}
 {% block content %}
-<div class="communities flex flex-wrap">
-    {% for community in page %}
-    <article class="community bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto max-w-full p-1 lg:p-2">
-        <a class="community__link block w-60" href="{{ url_for('.community', slug=community.slug) }}">
-            <div class="community__thumb_block">
-                <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title + 'thumb' }}">
-            </div>
-            <div class="community__desc_block text-center">
-                <h3 class="text-xl font-semibold my-2">{{ community.title }}</h3>
-                {% if community.game %}
-                <span class="text-gray-400">{{ community.game.title }}</span>
-                {% endif %}
-            </div>
-        </a>
-    </article>
-    {% endfor %}
+<div class="communities">
+    <div class="communities__description">
+        {{ description }}
+    </div>
+    <div class="communities__form_filter">
+        <div class="communities__filter">
+            <form class="communities__filter-form" method="POST" action="{{ url_for('main.communities') }}">
+                {{ form.hidden_tag() }}
+                {{ form.filtr() }}
+                {{ form.submit() }}
+            </form>
+        </div>
+    </div>
+    <div class="communities__block flex flex-wrap">
+        {% for community in page %}
+        <article class="community bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto max-w-full p-1 lg:p-2">
+            <a class="community__link block w-60" href="{{ url_for('.community', slug=community.slug) }}">
+                <div class="community__thumb_block">
+                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title + 'thumb' }}">
+                </div>
+                <div class="community__desc_block text-center">
+                    <h3 class="text-xl font-semibold my-2">{{ community.title }}</h3>
+                    {% if community.game %}
+                    <span class="text-gray-400">{{ community.game.title }}</span>
+                    {% endif %}
+                </div>
+            </a>
+        </article>
+        {% endfor %}
+    </div>
 </div>
 {{ macros.render_pagination(page, '.communities') }}
 {% endblock %}

@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, abort
 from .. import db
 from ..models import Post, Game, Tag, Community, Textfield
 from . import main
-from .forms import SearchForm, GamesFilterForm
+from .forms import SearchForm, GamesFilterForm, CommunitiesFilterForm
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -70,9 +70,6 @@ def games():
         else:
             order_arg = Game._title
 
-        print(form.filtr.data)
-        print(order_arg)
-
         games = db.select(Game).filter_by(published=True).order_by(order_arg)
         page = db.paginate(games)
         return render_template('main/games.html', page=page, form=form, description=textfield.body)
@@ -102,11 +99,29 @@ def community(slug):
 
 
 #  Communities list
-@main.route('/spolecznosci/')
+@main.route('/spolecznosci/', methods=['GET', 'POST'])
 def communities():
-    communities = db.select(Community).order_by(Community._title)
+    textfield = db.session.execute(db.select(Textfield).filter_by(name='communities_page')).scalar_one_or_none()
+    form = CommunitiesFilterForm()
+    order_arg = Community.id.desc()
+
+    if form.validate_on_submit():
+        if form.filtr.data == 1:
+            order_arg = Community.id.desc()
+        elif form.filtr.data == 2:
+            order_arg = Community._title
+        elif form.filtr.data == 3:
+            order_arg = Community._title.desc()
+        else:
+            order_arg = Community.id.desc()
+
+        communities = db.select(Community).filter_by(published=True).order_by(order_arg)
+        page = db.paginate(communities)
+        return render_template('main/communities.html', page=page, form=form, description=textfield.body)
+
+    communities = db.select(Community).filter_by(published=True).order_by(order_arg)
     page = db.paginate(communities)
-    return render_template('main/communities.html', page=page)
+    return render_template('main/communities.html', description=textfield.body, page=page, form=form)
 
 
 #  About page
