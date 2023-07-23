@@ -4,9 +4,16 @@
 
 iframe {
     margin: auto;
+    max-width: 100%
 }
 
 .post__body p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+.base-content__body p {
     margin-top: 1rem;
     margin-bottom: 1rem;
     text-align: justify;

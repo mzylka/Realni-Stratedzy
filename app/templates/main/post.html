@@ -3,7 +3,7 @@
 {% block content %}
 <div class="post_page flex-col bg-gray-800 px-6 py-6 rounded">
     <div class="post__thumb"><img class="block w-full object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title }}"></div>
-    <div class="post__title text-2xl lg:text-3xl my-3"><h1>{{ post.title }}</h1></div>
+    <div class="post__title text-3xl lg:text-4xl my-3 font-semibold"><h1>{{ post.title }}</h1></div>
     <div class="post__date mt-3"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
     <div class="post__author"><p>Autor: {{ post.author.username }}</p></div>
     <div class="post__body lg:text-lg my-3">{{ post.body | safe }}</div>

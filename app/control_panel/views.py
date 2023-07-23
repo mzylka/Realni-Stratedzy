@@ -224,6 +224,12 @@ def edit_game(id):
         game.producer = form.producer.data
         game.release_date = form.release_date.data
         game.body = form.body.data
+        game.web_link = form.web_link.data
+        game.steam_link = form.steam_link.data
+        game.twitter_link = form.twitter_link.data
+        game.fb_link = form.fb_link.data
+        game.reddit_link = form.reddit_link.data
+        game.discord_link = form.discord_link.data
         game.published = form.published.data
         db.session.add(game)
         db.session.commit()
@@ -234,6 +240,12 @@ def edit_game(id):
     form.producer.data = game.producer
     form.release_date.data = game.release_date
     form.body.data = game.body
+    form.web_link.data = game.web_link
+    form.steam_link.data = game.steam_link
+    form.twitter_link.data = game.twitter_link
+    form.fb_link.data = game.fb_link
+    form.reddit_link.data = game.reddit_link
+    form.discord_link.data = game.discord_link
     form.published.data = game.published
     return render_template('control_panel/add_game.html', form=form, thumb=game.thumb_name)
 

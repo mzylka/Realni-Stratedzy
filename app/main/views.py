@@ -64,13 +64,13 @@ def games():
         elif form.filtr.data == 3:
             order_arg = Game._title.desc()
         elif form.filtr.data == 4:
-            order_arg = Game.release_date
-        elif form.filtr.data == 5:
             order_arg = Game.release_date.desc()
+        elif form.filtr.data == 5:
+            order_arg = Game.release_date
         else:
             order_arg = Game._title
 
-        games = db.select(Game).filter_by(published=True).order_by(order_arg)
+        games = db.select(Game).filter_by(published=True).order_by(order_arg).where(Game.release_date != None)
         page = db.paginate(games)
         return render_template('main/games.html', page=page, form=form, description=textfield.body)
 

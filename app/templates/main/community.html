@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Społeczność: {{ community.title }} - {% endblock %}
 {% block content %}
-<div class="base-content flex-col bg-gray-800 px-6 py-6">
+<div class="community flex-col bg-gray-800 px-6 py-6">
   <div class="base-content__thumb"><img src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
   <div class="base-content__title">{{ community.title }}</div>
   <div class="base-content__body">{{ community.body | safe }}</div>

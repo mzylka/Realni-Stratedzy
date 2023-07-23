@@ -18,7 +18,7 @@
     <div><a href="{{ url_for('.add_game') }}">Dodaj grę</a></div>
     {% if page %}
     {% for game in page %}
-    <div class="game mx-4">
+    <div class="game my-4">
         <h3>{{ game.title }}</h3>
         <p>{{ game.producer }}</p>
         {% if current_user.is_administrator() %}
