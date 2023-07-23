@@ -3,6 +3,7 @@ from .. import db
 from ..models import Post, Game, Tag, Community, Textfield
 from . import main
 from .forms import SearchForm, GamesFilterForm, CommunitiesFilterForm
+from sqlalchemy import desc, nulls_first, nulls_last
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -64,13 +65,13 @@ def games():
         elif form.filtr.data == 3:
             order_arg = Game._title.desc()
         elif form.filtr.data == 4:
-            order_arg = Game.release_date.desc()
+            order_arg = nulls_first(desc(Game.release_date))
         elif form.filtr.data == 5:
-            order_arg = Game.release_date
+            order_arg = nulls_last(Game.release_date)
         else:
             order_arg = Game._title
 
-        games = db.select(Game).filter_by(published=True).order_by(order_arg).where(Game.release_date != None)
+        games = db.select(Game).filter_by(published=True).order_by(order_arg)
         page = db.paginate(games)
         return render_template('main/games.html', page=page, form=form, description=textfield.body)
 

@@ -14,7 +14,7 @@ class GamesFilterForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filtr.choices = [(1, 'Ostatnio dodane'), (2, 'A - Z'), (3, 'Z - A'), (4, 'Data premiery (Nadchodzące)'), (5, 'Data premiery (Najstarsze)')]
+        self.filtr.choices = [(1, 'Ostatnio dodane'), (2, 'A - Z'), (3, 'Z - A'), (4, 'Data premiery (Nadchodzące/TBD)'), (5, 'Data premiery (Najstarsze)')]
 
 
 class CommunitiesFilterForm(FlaskForm):
