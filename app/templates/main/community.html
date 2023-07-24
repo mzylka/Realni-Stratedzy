@@ -1,23 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Społeczność: {{ community.title }} - {% endblock %}
+{% block title %}{{ community.title }} - {% endblock %}
 {% block content %}
-<div class="community flex-col bg-gray-800 px-6 py-6">
-  <div class="base-content__thumb"><img src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
-  <div class="base-content__title">{{ community.title }}</div>
-  <div class="base-content__body">{{ community.body | safe }}</div>
-  <div class="base-content__links">
-    {% if community.web_link %}
-    <a href="{{ community.web_link }}">Strona internetowa</a>
-    {% endif %}
-    {% if community.discord_link %}
-    <a href="{{ community.web_link }}">Discord</a>
-    {% endif %}
-    {% if community.fb_link %}
-    <a href="{{ community.web_link }}">Facebook</a>
-    {% endif %}
-    {% if community.twitter_link %}
-    <a href="{{ community.web_link }}">Twitter</a>
-    {% endif %}
+<div class="base-content flex-col bg-gray-800 px-6 py-6">
+  <div class="base-content__top flex flex-col lg:flex-row">
+    <div class="base-content__left pr-4 grow">
+      <div class="base-content__thumb mb-4"><img class="mx-auto lg:m-0" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
+      <div class="base-content__title text-3xl lg:text-4xl my-2 font-semibold"><h1>{{ community.title }}</h1></div>
+      <div class="community-game text-gray-300">Gra: {{ community.game.title }}</div>
+    </div>
+    <div class="base-content__right min-w-fit">
+      <div class="base-content__links flex flex-col h-full my-2">
+      {% if community.web_link %}
+      <a class="flex items-center hover:text-sky-400 group transition my-1" href="{{ community.web_link }}" rel="nofollow"><svg class="w-6 h-6 fill-stone-100 group-hover:fill-sky-400 mr-2 transition" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12.02 0c6.614.011 11.98 5.383 11.98 12 0 6.623-5.376 12-12 12-6.623 0-12-5.377-12-12 0-6.617 5.367-11.989 11.981-12h.039zm3.694 16h-7.427c.639 4.266 2.242 7 3.713 7 1.472 0 3.075-2.734 3.714-7m6.535 0h-5.523c-.426 2.985-1.321 5.402-2.485 6.771 3.669-.76 6.671-3.35 8.008-6.771m-14.974 0h-5.524c1.338 3.421 4.34 6.011 8.009 6.771-1.164-1.369-2.059-3.786-2.485-6.771m-.123-7h-5.736c-.331 1.166-.741 3.389 0 6h5.736c-.188-1.814-.215-3.925 0-6m8.691 0h-7.685c-.195 1.8-.225 3.927 0 6h7.685c.196-1.811.224-3.93 0-6m6.742 0h-5.736c.062.592.308 3.019 0 6h5.736c.741-2.612.331-4.835 0-6m-12.825-7.771c-3.669.76-6.671 3.35-8.009 6.771h5.524c.426-2.985 1.321-5.403 2.485-6.771m5.954 6.771c-.639-4.266-2.242-7-3.714-7-1.471 0-3.074 2.734-3.713 7h7.427zm-1.473-6.771c1.164 1.368 2.059 3.786 2.485 6.771h5.523c-1.337-3.421-4.339-6.011-8.008-6.771"/></svg><span>Strona internetowa</span></a>
+      {% endif %}
+      {% if community.discord_link %}
+        <a class="flex items-center hover:text-sky-400 group transition my-1" href="{{ community.discord_link }}" rel="nofollow"><svg class="w-6 h-6 fill-stone-100 group-hover:fill-sky-400 mr-2 transition" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Discord</title><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span>Discord</span></a>
+      {% endif %}
+      {% if community.fb_link %}
+      <a class="flex items-center hover:text-sky-400 group transition my-1" href="{{ community.fb_link }}" rel="nofollow"><svg class="w-6 h-6 fill-stone-100 group-hover:fill-sky-400 mr-2 transition" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg><span>Facebook</span></a>
+      {% endif %}
+      {% if community.twitter_link %}
+      <a class="flex items-center hover:text-sky-400 group transition my-1" href="{{ community.twitter_link }}" rel="nofollow"><svg class="w-6 h-6 fill-stone-100 group-hover:fill-sky-400 mr-2 transition" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M21.543 7.104c.015.211.015.423.015.636 0 6.507-4.954 14.01-14.01 14.01v-.003A13.94 13.94 0 0 1 0 19.539a9.88 9.88 0 0 0 7.287-2.041 4.93 4.93 0 0 1-4.6-3.42 4.916 4.916 0 0 0 2.223-.084A4.926 4.926 0 0 1 .96 9.167v-.062a4.887 4.887 0 0 0 2.235.616A4.928 4.928 0 0 1 1.67 3.148 13.98 13.98 0 0 0 11.82 8.292a4.929 4.929 0 0 1 8.39-4.49 9.868 9.868 0 0 0 3.128-1.196 4.941 4.941 0 0 1-2.165 2.724A9.828 9.828 0 0 0 24 4.555a10.019 10.019 0 0 1-2.457 2.549z"/></svg><span>Twitter</span></a>
+      {% endif %}
+      </div>
+    </div>
   </div>
+  <div class="base-content__body">{{ community.body | safe }}</div>
 </div>
 {% endblock %}
