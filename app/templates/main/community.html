@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ community.title }} - {% endblock %}
 {% block content %}
-<div class="base-content flex-col bg-gray-800 px-6 py-6">
+<div class="base-content flex-col bg-zinc-800 px-6 py-6">
   <div class="base-content__top flex flex-col lg:flex-row">
     <div class="base-content__left pr-4 grow">
       <div class="base-content__thumb mb-4"><img class="mx-auto lg:m-0" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
@@ -25,6 +25,6 @@
       </div>
     </div>
   </div>
-  <div class="base-content__body">{{ community.body | safe }}</div>
+  <div class="base-content__body lg:text-lg">{{ community.body | safe }}</div>
 </div>
 {% endblock %}

@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block title %}{{ post.title }} - {% endblock %}
 {% block content %}
-<div class="post_page flex-col bg-gray-800 px-6 py-6 rounded">
+<div class="post_page flex-col bg-zinc-800 px-6 py-6 rounded">
     <div class="post__thumb"><img class="block w-full object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title }}"></div>
-    <div class="post__title text-3xl lg:text-4xl my-3 font-semibold"><h1>{{ post.title }}</h1></div>
-    <div class="post__date mt-3"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
-    <div class="post__author"><p>Autor: {{ post.author.username }}</p></div>
-    <div class="post__body lg:text-lg my-3">{{ post.body | safe }}</div>
-    <div class="post__tags-desc"><span>Tagi:</span></div>
+    <div class="post__title text-3xl lg:text-4xl my-4 font-semibold"><h1>{{ post.title }}</h1></div>
+    <div class="post__date mt-3 text-gray-300"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
+    <div class="post__author text-gray-300"><p>Autor: {{ post.author.username }}</p></div>
+    <div class="post__body lg:text-lg my-3 font-normal">{{ post.body | safe }}</div>
+    <div class="post__tags-desc text-gray-300"><span>Tagi:</span></div>
     <div class="post__tags mt-1 flex flex-wrap">
         {% for tag in post.tags %}
-        <a class="post__tag block bg-gray-900 rounded mr-2 p-1" href="{{ url_for('main.tag', slug=tag.slug) }}">{{ tag.name }}</a>
+        <a class="post__tag block bg-zinc-700 rounded mr-2 p-1" href="{{ url_for('main.tag', slug=tag.slug) }}">{{ tag.name }}</a>
         {% endfor %}
     </div>
 </div>

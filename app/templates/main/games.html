@@ -7,12 +7,12 @@
             <form class="game__filter-form" method="POST" action="{{ url_for('main.games') }}">
                 {{ form.hidden_tag() }}
                 {{ form.filtr(class="rounded w-60 p-1 lg:w-44 text-black focus:outline-none focus:ring focus:ring-sky-400") }}
-                {{ form.submit(class="block lg:inline-block w-full lg:w-max bg-gray-800 rounded mt-4 lg:mt-0 lg:ml-1 p-1 cursor-pointer hover:text-sky-400 transition")}}
+                {{ form.submit(class="block lg:inline-block w-full lg:w-max bg-zinc-800 rounded mt-4 lg:mt-0 lg:ml-1 p-1 cursor-pointer hover:text-sky-400 transition")}}
             </form>
         </div>
     </div>
     {% for game in page %}
-    <article class="game max-h-28 bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full p-2 lg:p-4">
+    <article class="game max-h-28 bg-zinc-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full p-2 lg:p-4">
         <a class="game__link w-full flex items-center hover:text-sky-400 transition" href="{{ url_for('.game', slug=game.slug) }}">
             <div class="game__thumb_block">
                 <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}">

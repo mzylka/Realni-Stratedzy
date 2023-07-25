@@ -6,14 +6,14 @@
         <div><span>Nie znaleziono postów</span></div>
     {% endif %}
     {% for post in page %}
-    <article class="post bg-gray-800 pb-6 rounded-lg shadow-md overflow-hidden max-w-md mb-6 mx-auto lg:flex lg:max-w-full lg:p-2">
+    <article class="post bg-zinc-800 pb-6 rounded-lg shadow-md overflow-hidden max-w-md mb-6 mx-auto lg:flex lg:max-w-full lg:p-2">
         <div class="post__thumb_block">
             <a class="post__link block lg:w-80" href="{{ url_for('.post', slug=post.slug) }}">
                 <img class="block w-full object-contain lg:max-h-48" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title + ' thumb' }}">
             </a>
         </div>
         <div class="post__desc_block py-2 lg:py-0 px-2">
-            <h3 class="font-semibold text-lg uppercase"><a class="hover:text-sky-400 transition-colors" href="{{ url_for('.post', slug=post.slug) }}">{{ post.title }}</a></h3>
+            <h3 class="font-bold text-xl lg:text-2xl uppercase"><a class="hover:text-sky-400 transition-colors" href="{{ url_for('.post', slug=post.slug) }}">{{ post.title }}</a></h3>
             <p class="text-xs text-gray-400 mt-1">{{ moment(post.timestamp).format('LL') }}</p>
             <p class="block mt-2">{{ post.short_desc }}</p>
         </div>
