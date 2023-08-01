@@ -1,44 +1,44 @@
 {% extends "base.html" %}
 {% block title %}Panel kontrolny - {% endblock %}
 {% block main %}
-<div class="flex flex-wrap bg-gray-800 px-6 py-6">
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+<div class="flex flex-wrap bg-zinc-800 px-6 py-6">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.posts_list') }}">
             <h3 class="font-semibold text-lg uppercase">Posty</h3>
             <p>Lista postów i związane z nimi akcje</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.tags_list') }}">
             <h3 class="font-semibold text-lg uppercase">Tagi</h3>
             <p>Lista tagów</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.games_list') }}">
             <h3 class="font-semibold text-lg uppercase">Gry</h3>
             <p>Lista gier i związane z nimi akcje</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.communities_list') }}">
             <h3 class="font-semibold text-lg uppercase">Społeczności</h3>
             <p>Lista społeczności i związane z nimi akcje</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.users') }}">
             <h3 class="font-semibold text-lg uppercase">Użytkownicy</h3>
             <p>Lista użytkowników i związane z nimi akcje</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.edit_about_us') }}">
             <h3 class="font-semibold text-lg uppercase">O nas</h3>
             <p>Edycja strony "O nas"</p>
         </a>
     </div>
-    <div class="m-4 p-2 bg-gray-700 rounded-lg">
+    <div class="m-4 p-2 bg-zinc-700 rounded-lg">
         <a class="block" href="{{ url_for('.edit_textfield', field='communities_page') }}">
             <h3 class="font-semibold text-lg uppercase">Pole tesktowe na stronie społeczności</h3>
             <p>Edycja pola tekstowego "communities page"</p>

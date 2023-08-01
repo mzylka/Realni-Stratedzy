@@ -1,32 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Lista gier(Panel) - {% endblock %}
-{% import "_macros.html" as macros %}
 {% block main %}
-<div class="flex-col bg-gray-800 px-6 py-6">
-    <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
+{% import "_macros.html" as macros %}
+{{ macros.render_back_to_panel() }}
+<div class="flex-col bg-zinc-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="mb-2 p-2 bg-red-600">
+        <ul class="flashes">
             {% for message in messages %}
-                <li>{{ message }}</li>
+            <li>{{ message }}</li>
             {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
+        </ul>
     </div>
-    <div><h2>Lista gier</h2></div>
-    <div><a href="{{ url_for('.add_game') }}">Dodaj grę</a></div>
+    {% endif %}
+    {% endwith %}
+    <div class="mb-4"><h2 class="text-4xl font-semibold">Lista gier</h2></div>
+    <div><a class="p-2 rounded bg-zinc-700 hover:text-sky-400" href="{{ url_for('.add_game') }}">Dodaj grę</a></div>
     {% if page %}
     {% for game in page %}
-    <div class="game my-4">
-        <h3>{{ game.title }}</h3>
-        <p>{{ game.producer }}</p>
-        {% if current_user.is_administrator() %}
-        <div><a href="{{ url_for('.edit_game', id=game.id) }}">Edytuj grę</a></div>
-        <div><a href="{{ url_for('.show_game', id=game.id) }}">Podejrzyj grę</a></div>
-        <div><a href="{{ url_for('.delete_game', id=game.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz usunąć grę?');">Usuń grę</a></div>
-        {% endif %}
-    </div>
+        {{ macros.render_element_of_cp_lists(game, edit='.edit_game', show='.show_game', delete='.delete_game') }}
     {% endfor %}
     {% endif %}
     {{ macros.render_pagination(page, '.games_list') }}

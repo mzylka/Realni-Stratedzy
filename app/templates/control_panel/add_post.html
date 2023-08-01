@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Dodaj post - {% endblock %}
 {% block main %}
-<div class="users bg-gray-800 px-6 py-6">
+{% import "_macros.html" as macros %}
+{{ macros.render_back_to_panel() }}
+<div class="users bg-zinc-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="mb-2 p-2 bg-red-600">
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div class="">
             {{ form.hidden_tag() }}
@@ -35,7 +48,7 @@
                 <p>Opublikowany: </p>
                 {{ form.published }}
             </div>
-            <div class="mx-auto">{{ form.submit(class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+            <div class="mt-4">{{ form.submit(class="block bg-zinc-700 mx-auto hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded cursor-pointer") }}</div>
         </div>
     </form>
 </div>

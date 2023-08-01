@@ -1,31 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Lista społeczności(Panel) - {% endblock %}
-{% import "_macros.html" as macros %}
 {% block main %}
-<div class="flex-col bg-gray-800 px-6 py-6">
+{% import "_macros.html" as macros %}
+{{ macros.render_back_to_panel() }}
+<div class="flex-col bg-zinc-800 px-6 py-6">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
+    <div class="mb-2 p-2 bg-red-600">
+        <ul class="flashes">
+            {% for message in messages %}
             <li>{{ message }}</li>
-        {% endfor %}
+            {% endfor %}
         </ul>
+    </div>
     {% endif %}
     {% endwith %}
-    <div><h2>Lista społeczności</h2></div>
-    <div class="community-actions">
-        <a href="{{ url_for('.add_community') }}">Dodaj Społeczność</a>
-    </div>
+    <div class="mb-4"><h2 class="text-4xl font-semibold">Lista społeczności</h2></div>
+    <div><a class="p-2 rounded bg-zinc-700 hover:text-sky-400" href="{{ url_for('.add_community') }}">Dodaj Społeczność</a></div>
     {% if page %}
     {% for community in page %}
-    <div class="post py-6">
-        <h3>{{ community._title }}</h3>
-        {% if current_user.is_administrator() %}
-        <div><a href="{{ url_for('.edit_community', id=community.id) }}">Edytuj Społeczność</a></div>
-        <div><a href="{{ url_for('.show_community', id=community.id) }}">Podejrzyj Społeczność</a></div>
-        <div><a href="{{ url_for('.delete_community', id=community.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz usunąć społeczność?');">Usuń Społeczność</a></div>
-        {% endif %}
-    </div>
+        {{ macros.render_element_of_cp_lists(community, edit='.edit_community', show='.show_community', delete='.delete_community') }}
     {% endfor %}
     {% endif %}
     {{ macros.render_pagination(page, '.communities_list') }}

@@ -283,6 +283,10 @@ def tags_list():
 def add_tag():
     form = AddTagForm()
     if form.validate_on_submit():
+        existing_tag = db.session.execute(db.select(Tag).filter_by(_name=form.name.data)).scalar_one_or_none()
+        if existing_tag:
+            flash("Tag o tej nazwie już istnieje!")
+            return redirect(url_for('.add_tag'))
         tag = Tag(name=form.name.data)
         db.session.add(tag)
         db.session.commit()

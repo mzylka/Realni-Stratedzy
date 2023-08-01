@@ -2,31 +2,27 @@
 {% import "_macros.html" as macros %}
 {% block title %}Lista tagów(Panel) - {% endblock %}
 {% block main %}
-<div class="flex-col bg-gray-800 px-6 py-6">
-    <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
+{% import "_macros.html" as macros %}
+{{ macros.render_back_to_panel() }}
+<div class="flex-col bg-zinc-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="mb-2 p-2 bg-red-600">
+        <ul class="flashes">
             {% for message in messages %}
-                <li>{{ message }}</li>
+            <li>{{ message }}</li>
             {% endfor %}
-            </ul>
-        {% endif %}
-        {% endwith %}
+        </ul>
     </div>
-    <div><h2>Lista tagów</h2></div>
+    {% endif %}
+    {% endwith %}
+    <div class="mb-4"><h2 class="text-4xl font-semibold">Lista tagów</h2></div>
     <div class="tags-actions">
-        <a href="{{ url_for('.add_tag') }}">Dodaj tag</a>
+        <a class="p-2 rounded bg-zinc-700 hover:text-sky-400" href="{{ url_for('.add_tag') }}">Dodaj tag</a>
     </div>
     {% if page %}
     {% for tag in page %}
-    <div class="post py-6">
-        <h3>{{ tag.name }}</h3>
-        {% if current_user.is_administrator() %}
-        <div><a href="{{ url_for('.edit_tag', id=tag.id) }}">Edytuj tag</a></div>
-        <div><a href="{{ url_for('.delete_tag', id=tag.id) }}">Usuń tag</a></div>
-        {% endif %}
-    </div>
+        {{ macros.render_element_of_cp_lists(tag, edit='.edit_tag', delete='.delete_tag') }}
     {% endfor %}
     {% endif %}
     {{ macros.render_pagination(page, '.tags_list') }}

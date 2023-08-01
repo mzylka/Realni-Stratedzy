@@ -2,7 +2,7 @@
 {% import "_macros.html" as macros %}
 {% block content %}
 <div class="games">
-    <div class="game__form_filter my-6">
+    <div class="game__form_filter mb-3">
         <div class="game__filter flex justify-center lg:justify-end">
             <form class="game__filter-form" method="POST" action="{{ url_for('main.games') }}">
                 {{ form.hidden_tag() }}
@@ -12,8 +12,8 @@
         </div>
     </div>
     {% for game in page %}
-    <article class="game max-h-28 bg-zinc-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full p-2 lg:p-4">
-        <a class="game__link w-full flex items-center hover:text-sky-400 transition" href="{{ url_for('.game', slug=game.slug) }}">
+    <article class="game max-h-28 bg-zinc-800 rounded-lg shadow-md overflow-hidden mb-6 mx-auto lg:flex max-w-full hover:ring-2 ring-red-600 transition">
+        <a class="game__link w-full flex items-center p-2 lg:p-4 hover:text-sky-400 transition" href="{{ url_for('.game', slug=game.slug) }}">
             <div class="game__thumb_block">
                 <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}">
             </div>
