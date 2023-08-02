@@ -75,7 +75,7 @@ def delete_user(id):
     return redirect(url_for('control_panel.users'))
 
 
-@auth.before_app_request
+@auth.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.ping()

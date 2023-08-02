@@ -11,7 +11,7 @@ from ..helpers import upload_img
 # CONTROL_PANEL INDEX
 @control_panel.route('/')
 def index():
-    if current_user.is_anonymous:
+    if not current_user.is_authenticated:
         return redirect(url_for('control_panel.auth.login'))
     return render_template('control_panel/index.html')
 
@@ -60,7 +60,6 @@ def edit_profile_admin(id):
 def posts_list():
     posts = db.select(Post).order_by(Post.timestamp.desc())
     page = db.paginate(posts)
-    print(page.items)
     return render_template('control_panel/posts_list.html', page=page)
 
 

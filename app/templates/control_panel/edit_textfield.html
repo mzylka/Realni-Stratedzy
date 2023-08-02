@@ -3,7 +3,7 @@
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
-<div class="bg-gray-800 px-6 py-6">
+<div class="bg-zinc-800 px-6 py-6">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="mb-2 p-2 bg-red-600">
@@ -21,7 +21,7 @@
             <div>
                 {{ form.body(class="h-24 w-full mb-4 shadow appearance-none border rounded text-black") }}
             </div>
-            <div class="mx-auto mt-4">{{ form.submit(placeholder="Edytuj", class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+            <div class="mt-4">{{ form.submit(placeholder="Edytuj", class="block mx-auto bg-zinc-700 hover:bg-zinc-600 transition text-white font-bold py-2 px-4 rounded cursor-pointer") }}</div>
         </div>
     </form>
 

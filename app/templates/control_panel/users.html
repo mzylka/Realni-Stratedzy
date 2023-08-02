@@ -18,13 +18,14 @@
     <div class="mb-4"><h2 class="text-4xl font-semibold">Lista użytkowników</h2></div>
     <div><a class="p-2 rounded bg-zinc-700 hover:text-sky-400" href="{{ url_for('.auth.register') }}">Stwórz konto</a></div>
     {% for user in page %}
-    <div class="users_list__user bg-zinc-700 my-4">
-        <h4><a href="{{ url_for('.user', username=user.username) }}">{{ user.username }}</a></h4>
-        {% if current_user.is_administrator() %}
-        <a class="block" href="{{ url_for('.edit_profile_admin', id=user.id) }}">
+    <div class="users_list__user bg-zinc-700 my-4 p-2">
+        <h4><a class="{% if user.is_administrator() %}text-red-600{% endif %} text-xl" href="{{ url_for('.user', username=user.username) }}">{{ user.username }}</a></h4>
+        <p>Rola: {{ user.role.name }}</p>
+        {% if current_user.is_administrator() and not user.is_administrator() %}
+        <a class="block hover:text-sky-400 transition" href="{{ url_for('.edit_profile_admin', id=user.id) }}">
             Edytuj profil [A]
         </a>
-        <a href="{{ url_for('.auth.delete_user', id=user.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz usunąć usera?');">Usuń użytkownika</a>
+        <a class="block hover:text-red-600 transition" href="{{ url_for('.auth.delete_user', id=user.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz usunąć usera?');">Usuń użytkownika</a>
         {% endif %}
     </div>
     {% endfor %}

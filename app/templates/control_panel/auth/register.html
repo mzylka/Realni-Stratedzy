@@ -5,12 +5,15 @@
     <form class="block max-w-2xl justify-self-center mx-auto" method="POST">
         <div class="flex flex-col">
             {{ form.hidden_tag() }}
-            {{ form.csrf_token }}
+            {{ form.email.label }}
             {{ form.email(placeholder="Email", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            {{ form.username.label }}
             {{ form.username(placeholder="Username", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            {{ form.password.label }}
             {{ form.password(placeholder="Password", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+            {{ form.password2.label }}
             {{ form.password2(placeholder="Repeat password", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
-            <div class="mx-auto">{{ form.submit(class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+            <div class="mx-auto">{{ form.submit(class="bg-zinc-700 hover:bg-zinc-600 transition text-white font-bold py-2 px-4 rounded cursor-pointer") }}</div>
         </div>
         <div>
             {% for err in form.username.errors %}

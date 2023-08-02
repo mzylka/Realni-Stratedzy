@@ -3,7 +3,7 @@
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
-<div class="users bg-gray-800 px-6 py-6">
+<div class="users bg-zinc-800 px-6 py-6">
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div>
             {% for err in form.thumb.errors %}
@@ -73,7 +73,7 @@
                 <p>Opublikowany: </p>
                 {{ form.published }}
             </div>
-            <div class="mx-auto mt-4">{{ form.submit(placeholder="Zapisz zmiany", class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+            <div class="mt-4">{{ form.submit(placeholder="Zapisz zmiany", class="block mx-auto bg-zinc-700 hover:bg-zinc-600 transition-all text-white font-bold py-2 px-4 rounded cursor-pointer") }}</div>
         </div>
     </form>
 </div>

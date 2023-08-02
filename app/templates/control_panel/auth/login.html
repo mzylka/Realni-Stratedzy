@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Logowanie - {% endblock %}
 {% block main %}
-<div class="bg-gray-800 px-6 py-6">
+<div class="bg-zinc-800 px-6 py-6">
     <form class="block max-w-2xl justify-self-center mx-auto" method="POST">
         <div class="flex flex-col">
             {{ form.hidden_tag() }}
-            {{ form.username(placeholder="Username", class="h-10 mb-4 shadow appearance-none border rounded") }}
-            {{ form.password(placeholder="Password", class="h-10 shadow appearance-none border rounded") }}
+            {{ form.username.label }}
+            {{ form.username(placeholder="Username", class="h-10 text-zinc-900 mb-4 shadow appearance-none border rounded") }}
+            {{ form.password.label }}
+            {{ form.password(placeholder="Password", class="h-10 text-zinc-900 shadow appearance-none border rounded") }}
             <div class="mx-auto my-3">{{ form.remember_me.label }} {{ form.remember_me(class="") }}</div>
-            <div class="mx-auto">{{ form.submit(class="bg-gray-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
+            <div class="mx-auto">{{ form.submit(class="bg-zinc-700 hover:bg-gray-600 transition-all text-white font-bold py-2 px-4 rounded") }}</div>
         </div>
     </form>
     {% with messages = get_flashed_messages() %}
