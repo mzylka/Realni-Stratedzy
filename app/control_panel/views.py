@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from .. import db
 from ..models import Role, User, Post, Game, Tag, Community, Textfield
-from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs, EditTextfield
+from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs, EditTextfield, EditPrivacyPolicy
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
 from ..helpers import upload_img
@@ -91,7 +91,7 @@ def add_post():
         db.session.commit()
         flash('Post został dodany.')
         return redirect(url_for('.posts_list'))
-    print(form.errors)
+
     return render_template('control_panel/add_post.html', form=form)
 
 
@@ -408,26 +408,28 @@ def show_community(id):
     return render_template('main/community.html', community=community)
 
 
-@control_panel.route('/edit-about-us/', methods=['GET', 'POST'])
+@control_panel.route('/edit-page/<page_name>', methods=['GET', 'POST'])
 @content_editor_required
 @login_required
-def edit_about_us():
-    about = db.session.execute(db.select(Textfield).filter_by(name='about_us')).scalar_one_or_none()
+def edit_pages_content(page_name):
+    p_cont = db.session.execute(db.select(Textfield).filter_by(name=page_name)).scalar_one_or_none()
+    if not p_cont:
+        abort(404)
     form = EditAboutUs()
 
     if form.validate_on_submit():
-        if not about:
-            about = Textfield(body=form.body.data)
+        if not p_cont:
+            p_cont = Textfield(body=form.body.data)
         else:
-            about.body = form.body.data
-        db.session.add(about)
+            p_cont.body = form.body.data
+        db.session.add(p_cont)
         db.session.commit()
-        flash('"O nas" zostało zaktualizowane.')
+        flash(f'"{page_name}" zostało zaktualizowane.')
 
-    if about:
-        form.body.data = about.body
+    if p_cont:
+        form.body.data = p_cont.body
 
-    return render_template('control_panel/edit_about_us.html', form=form)
+    return render_template('control_panel/edit_pages_content.html', title=page_name, form=form)
 
 
 @control_panel.route('/edit-textfield/<field>', methods=['GET', 'POST'])

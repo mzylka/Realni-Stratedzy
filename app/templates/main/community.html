@@ -6,7 +6,9 @@
     <div class="base-content__left pr-4 grow">
       <div class="base-content__thumb mb-4"><img class="mx-auto lg:m-0" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
       <div class="base-content__title text-3xl lg:text-4xl my-2 font-semibold"><h1>{{ community.title }}</h1></div>
-      <div class="community-game text-gray-300">Gra: {{ community.game.title }}</div>
+      {% if community.game %}
+      <div class="community-game text-gray-300">Gra: <a class="text-sky-400 hover:text-red-600" href="{{ url_for('main.game', slug=community.game.slug) }}">{{ community.game.title }}</a></div>
+      {% endif %}
     </div>
     <div class="base-content__right min-w-fit">
       <div class="base-content__links flex flex-col h-full my-2">

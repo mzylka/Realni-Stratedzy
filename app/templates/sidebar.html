@@ -21,7 +21,7 @@
   <h4 class="font-semibold text-lg">Popularne tagi</h4>
   <div class="sidebar__tags-block flex flex-wrap mt-1">
     {% for tag in tags_side %}
-    <div class="bg-zinc-800 rounded mr-1 p-1"><a class="transition hover:text-sky-400" href="{{ url_for('main.tag', slug=tag.slug_name) }}">{{ tag[0] }}</a></div>
+    <div class="bg-zinc-800 rounded mr-1 mt-1 p-1"><a class="transition hover:text-sky-400" href="{{ url_for('main.tag', slug=tag.slug_name) }}">{{ tag[0] }}</a></div>
     {% endfor %}
   </div>
 </div>

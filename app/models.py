@@ -226,9 +226,11 @@ class Textfield(db.Model):
     @staticmethod
     def insert_textfields():
         textfields = {
-            'about_us': 'Lorem ipsum',
+            'about_us_page': 'Lorem ipsum',
             'games_page': 'Lorem ipsum',
-            'communities_page': 'Lorem ipsum'
+            'communities_page': 'Lorem ipsum',
+            'contact_page': 'Lorem ipsum',
+            'privacy_policy_page': 'Lorem ipsum'
         }
         for f in textfields:
             textfield = db.session.execute(db.select(Textfield).filter_by(name=f)).scalar_one_or_none()

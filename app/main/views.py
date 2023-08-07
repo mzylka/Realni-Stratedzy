@@ -22,14 +22,14 @@ def index():
 
 
 #  Posts for specified game
-@main.route('/posty/<gra_slug>')
-def posty(gra_slug):
-    gra = db.session.execute(db.select(Game).filter_by(slug_title=gra_slug)).scalar_one_or_none()
+@main.route('/posty/<game_slug>')
+def posts(game_slug):
+    gra = db.session.execute(db.select(Game).filter_by(slug_title=game_slug)).scalar_one_or_none()
     if not gra:
         abort(404)
     posts = db.select(Post).filter_by(published=True).where(Post.game_id == gra.id).order_by(Post.timestamp)
     page = db.paginate(posts)
-    return render_template('main/index.html', page=page)
+    return render_template('index.html', page=page)
 
 
 #  Post page
@@ -101,12 +101,15 @@ def community(slug):
 
 #  Communities list
 @main.route('/spolecznosci/', methods=['GET', 'POST'])
-def communities():
+@main.route('/spolecznosci/<game_slug>', methods=['GET', 'POST'])
+def communities(game_slug=None):
     textfield = db.session.execute(db.select(Textfield).filter_by(name='communities_page')).scalar_one_or_none()
     form = CommunitiesFilterForm()
+    if game_slug:
+        form = None
     order_arg = Community.id.desc()
 
-    if form.validate_on_submit():
+    if form and form.validate_on_submit():
         if form.filtr.data == 1:
             order_arg = Community.id.desc()
         elif form.filtr.data == 2:
@@ -120,7 +123,12 @@ def communities():
         page = db.paginate(communities)
         return render_template('main/communities.html', page=page, form=form, description=textfield.body)
 
-    communities = db.select(Community).filter_by(published=True).order_by(order_arg)
+    communities = None
+    if game_slug:
+        game = db.session.execute(db.select(Game).filter_by(slug_title=game_slug, published=True)).scalar_one_or_none()
+        communities = game.communities
+    else:
+        communities = db.select(Community).filter_by(published=True).order_by(order_arg)
     page = db.paginate(communities)
     return render_template('main/communities.html', description=textfield.body, page=page, form=form)
 
@@ -128,8 +136,27 @@ def communities():
 #  About page
 @main.route('/o-nas/')
 def about_us():
-    about_us = db.session.execute(db.select(Textfield).filter_by(name='about_us')).scalar_one_or_none()
-    return render_template('main/about_us.html', about_us=about_us)
+    content = db.session.execute(db.select(Textfield).filter_by(name='about_us_page')).scalar_one_or_none()
+    if not content:
+        abort(404)
+    return render_template('main/page_content.html', title='O nas', page_content=content)
+
+
+@main.route('/kontakt/')
+def contact():
+    content = db.session.execute(db.select(Textfield).filter_by(name='contact_page')).scalar_one_or_none()
+    if content is None:
+        abort(404)
+    return render_template('main/page_content.html', title='Kontakt', page_content=content)
+
+
+@main.route('/polityka-prywatnosci/')
+def privacy_policy():
+    content = db.session.execute(db.select(Textfield).filter_by(name='privacy_policy_page')).scalar_one_or_none()
+    print(content)
+    if not content:
+        abort(404)
+    return render_template('main/page_content.html', title='Polityka Prywatności', page_content=content)
 
 
 #  Searching posts by body

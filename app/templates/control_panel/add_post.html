@@ -18,6 +18,7 @@
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div class="">
             {{ form.hidden_tag() }}
+            {{ form.thumb.label }}
             {{ form.thumb }}
             {% if thumb %}
             <p>Aktualna miniaturka:</p>

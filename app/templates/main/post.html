@@ -7,7 +7,7 @@
     <div class="post__date mt-3 text-gray-300"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
     <div class="post__author text-gray-300"><p>Autor: {{ post.author.username }}</p></div>
     {% if post.game %}
-    <div class="post__game text-gray-300">Gra: <a class="text-sky-400 hover:text-red-600" href="{{ url_for('main.game', slug=post.game.slug) }}">{{ post.game.title }}</a></div>
+    <div class="post__game text-gray-300"><a class="text-sky-400 hover:text-red-600" href="{{ url_for('main.game', slug=post.game.slug) }}">{{ post.game.title }}</a></div>
     {% endif %}
     <div class="post__body lg:text-lg my-3 font-normal">{{ post.body | safe }}</div>
     <div class="post__tags mt-1 pt-2 flex flex-wrap border-t">

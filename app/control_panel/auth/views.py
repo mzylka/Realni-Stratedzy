@@ -14,6 +14,7 @@ def login():
         user = db.session.execute(db.select(User).where(User.username == form.username.data)).scalar_one_or_none()
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
+            user.ping()
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('control_panel.index')
@@ -26,7 +27,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Zostałem wylogowany.')
     return redirect(url_for('main.index'))
 
 
@@ -73,9 +73,3 @@ def delete_user(id):
     db.session.commit()
     flash(f'Użytkownik {username} został usunięty')
     return redirect(url_for('control_panel.users'))
-
-
-@auth.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.ping()

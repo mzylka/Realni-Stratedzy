@@ -94,6 +94,7 @@ class AddCommunityForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.game.choices = [(game.id, game.title) for game in db.session.execute(db.select(Game).order_by(Game._title)).scalars()]
+        self.game.choices.append(("0", 'Nie dotyczy'))
 
 
 class EditCommunityForm(AddCommunityForm):
@@ -110,6 +111,11 @@ class EditTextfield(FlaskForm):
     submit = SubmitField('Edytuj')
 
 
-class SearchForm(FlaskForm):
-    text = StringField('Szukaj', validators=[Length(1, 128)])
-    submit = SubmitField('Dupa')
+class EditContact(FlaskForm):
+    body = CKEditorField('Treść', validators=[DataRequired()])
+    submit = SubmitField('Edytuj')
+
+
+class EditPrivacyPolicy(FlaskForm):
+    body = CKEditorField('Treść', validators=[DataRequired()])
+    submit = SubmitField('Edytuj')
