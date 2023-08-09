@@ -145,7 +145,7 @@ def about_us():
 @main.route('/kontakt/')
 def contact():
     content = db.session.execute(db.select(Textfield).filter_by(name='contact_page')).scalar_one_or_none()
-    if content is None:
+    if not content:
         abort(404)
     return render_template('main/page_content.html', title='Kontakt', page_content=content)
 

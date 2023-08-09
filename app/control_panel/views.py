@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from .. import db
 from ..models import Role, User, Post, Game, Tag, Community, Textfield
-from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditAboutUs, EditTextfield, EditPrivacyPolicy
+from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditTextForm
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
 from ..helpers import upload_img
@@ -68,6 +68,9 @@ def posts_list():
 @login_required
 def add_post():
     form = AddPostForm()
+    tags_q = db.session.execute(db.select(Tag._name).order_by(Tag._name)).all()
+    tags_list = [tag[0] for tag in tags_q]
+    print(tags_q)
     if form.validate_on_submit():
         tags = form.tags.data.split(',')
         strip_tags = set([i.strip() for i in tags])
@@ -92,7 +95,7 @@ def add_post():
         flash('Post został dodany.')
         return redirect(url_for('.posts_list'))
 
-    return render_template('control_panel/add_post.html', form=form)
+    return render_template('control_panel/add_post.html', form=form, tags_list=tags_list)
 
 
 @control_panel.route('/edit-post/<int:id>', methods=['GET', 'POST'])
@@ -415,7 +418,7 @@ def edit_pages_content(page_name):
     p_cont = db.session.execute(db.select(Textfield).filter_by(name=page_name)).scalar_one_or_none()
     if not p_cont:
         abort(404)
-    form = EditAboutUs()
+    form = EditTextForm()
 
     if form.validate_on_submit():
         if not p_cont:
@@ -437,7 +440,7 @@ def edit_pages_content(page_name):
 @login_required
 def edit_textfield(field):
     textfield = db.session.execute(db.select(Textfield).filter_by(name=field)).scalar_one_or_none()
-    form = EditTextfield()
+    form = EditTextForm()
 
     if form.validate_on_submit():
         textfield.body = form.body.data

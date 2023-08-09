@@ -102,6 +102,12 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.ADMIN)
 
+    def is_content_editor(self):
+        return self.can(Permission.CONTENT_EDITOR)
+
+    def is_poster(self):
+        return self.can(Permission.POSTER)
+
     def is_post_author(self, post):
         return post.author == self
 

@@ -18,6 +18,7 @@
             <p>Lista tagów</p>
         </a>
     </div>
+    {% if current_user.is_content_editor() %}
     <div class="m-4 p-2 bg-zinc-700 hover:bg-zinc-600 transition rounded-lg">
         <a class="block" href="{{ url_for('.games_list') }}">
             <h3 class="font-semibold text-lg uppercase">Gry</h3>
@@ -60,7 +61,7 @@
             <p>Edycja pola tekstowego "communities page"</p>
         </a>
     </div>
-
+    {% endif %}
 </div>
 
 {% endblock %}

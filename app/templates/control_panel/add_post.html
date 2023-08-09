@@ -3,7 +3,7 @@
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
-<div class="users bg-zinc-800 px-6 py-6">
+<div class="bg-zinc-800 px-6 py-6">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="mb-2 p-2 bg-red-600">
@@ -43,7 +43,13 @@
             <div>
                 <p>Tagi:</p>
                 <span class="block">Odzielaj tagi przecinkiem bez spacji (np. tag1,tag2,tag3)</span>
-                {{ form.tags(placeholder="Tagi", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.tags(placeholder="Tagi", id="add_post-input_tags", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
+                <span>Lista tagów: </span>
+                <div id="add_post-tags_list">
+                    {% for t in tags_list %}
+                    <button class="bg-zinc-700 p-1">{{ t }}</button>
+                    {% endfor %}
+                </div>
             </div>
             <div>
                 <p>Opublikowany: </p>

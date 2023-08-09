@@ -1,13 +1,5 @@
-{% block header %}
-{% include 'header.html' %}
-{% endblock %}
+{% extends "base.html" %}
 
-{% block body %}
-<main class="text-slate-50">
-    <h1>403 Forbidden</h1>
-</main>
-{% endblock %}
-
-{% block footer %}
-{% include 'footer.html' %}
+{% block content %}
+    <h1>403: Forbidden</h1>
 {% endblock %}
