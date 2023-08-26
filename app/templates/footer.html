@@ -11,9 +11,9 @@
         </div>
         <div class="footer__links mb-4 transition-colors lg:w-0 lg:grow">
             <span class="text-lg font-semibold">Informacje:</span>
-            <a class="block hover:text-sky-400 transition-colors" href="">O nas</a>
-            <a class="block hover:text-sky-400 transition-colors" href="">Polityka prywatności</a>
-            <a class="block hover:text-sky-400 transition-colors" href="">Kontakt</a>
+            <a class="block hover:text-sky-400 transition-colors" href="{{ url_for('main.about_us') }}">O nas</a>
+            <a class="block hover:text-sky-400 transition-colors" href="{{ url_for('main.privacy_policy') }}">Polityka prywatności</a>
+            <a class="block hover:text-sky-400 transition-colors" href="{{ url_for('main.contact') }}">Kontakt</a>
         </div>
         <div class="footer__socials lg:w-0 lg:grow">
             <span class="text-lg font-semibold">Social Media:</span>

@@ -25,7 +25,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_home_page(self):
         resp = self.client.get('/')
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('Artykuł' in resp.get_data(as_text=True))
+        self.assertTrue('Realni' in resp.get_data(as_text=True))
 
     def test_control_panel_redirect(self):
         resp = self.client.get('/control-panel/')

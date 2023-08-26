@@ -1,7 +1,7 @@
 import datetime
 import unittest
 from app import create_app, db
-from app.models import User, Role, Game
+from app.models import User, Role, Game, Tag, Textfield
 from pathlib import Path
 
 
@@ -13,10 +13,13 @@ class AdminTestCase(unittest.TestCase):
         db.drop_all()
         db.create_all()
         Role.insert_roles()
+        Textfield.insert_textfields()
         admin = User(email='admin@test.com', username='admin', password='123')
         test_user = User(email='testuser@example.com', username='testuser', password='1234')
+        tag1 = Tag(name='tag1')
         db.session.add(admin)
         db.session.add(test_user)
+        db.session.add(tag1)
         db.session.commit()
         self.client = self.app.test_client(use_cookies=True)
         self.resources = Path(__file__).parent / 'resources'
@@ -30,7 +33,7 @@ class AdminTestCase(unittest.TestCase):
         #  log in
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'}, follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('Zalogowany jako admin' in resp.get_data(as_text=True))
+        self.assertTrue('Zalogowano jako admin' in resp.get_data(as_text=True))
 
     def test_login_fail(self):
         #  log in
@@ -44,12 +47,12 @@ class AdminTestCase(unittest.TestCase):
         #  log in
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'}, follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('Zalogowany jako admin' in resp.get_data(as_text=True))
+        self.assertTrue('Zalogowano jako admin' in resp.get_data(as_text=True))
 
         #  log out
         resp = self.client.get('/control-panel/auth/logout', follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('Artykuł' in resp.get_data(as_text=True))
+        self.assertTrue('Realni' in resp.get_data(as_text=True))
 
     #  TEST auth/register
     def test_register_user(self):
@@ -67,7 +70,7 @@ class AdminTestCase(unittest.TestCase):
         self.assertTrue('Użytkownik został zarejestrowany.' in resp.get_data(as_text=True))
 
     def test_register_user_with_existing_mail(self):
-        #  log in as admin
+        # log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'}, follow_redirects=True)
 
         #  register a user with existing email in the db
@@ -81,7 +84,7 @@ class AdminTestCase(unittest.TestCase):
         self.assertTrue('Email już istnieje' in resp.get_data(as_text=True))
 
     def test_register_user_with_existing_username(self):
-        #  log in as admin
+        # log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'}, follow_redirects=True)
 
         #  register a user with existing username in the db
@@ -94,7 +97,7 @@ class AdminTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Username już istnieje' in resp.get_data(as_text=True))
 
-    #  TEST auth/delete_user
+    # TEST auth/delete_user
     def test_delete_user(self):
         #  log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
@@ -104,7 +107,7 @@ class AdminTestCase(unittest.TestCase):
         resp = self.client.get('/control-panel/auth/delete-user/2')
         self.assertEqual(resp.status_code, 302)
 
-    #  TEST auth/new_password
+    # TEST auth/new_password
     def test_new_password_as_admin(self):
         #  log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
@@ -145,7 +148,7 @@ class AdminTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Nowe hasło nie może być takie same jak stare!' in resp.get_data(as_text=True))
 
-    #  TEST control_panel/users
+    # TEST control_panel/users
     def test_users_list(self):
         #  log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
@@ -156,14 +159,20 @@ class AdminTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Lista użytkowników' in resp.get_data(as_text=True))
 
-    #  TEST control_panel/user/<edit-profile>
+    # TEST control_panel/user/<edit-profile>
     def test_edit_user_profile(self):
-        #  log in as admin
+        # log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
                                 follow_redirects=True)
 
-        #  edit admin profile
-        resp = self.client.post('/control-panel/edit-profile/1', data={'username': 'adminek', 'email': 'admin@test.com', 'role': 2}, follow_redirects=True)
+        # edit admin profile
+        # test get method
+        resp = self.client.get('/control-panel/edit-profile/1')
+        self.assertTrue(resp.status_code, 200)
+        self.assertTrue('admin' in resp.get_data(as_text=True))
+
+        # test post method
+        resp = self.client.post('/control-panel/edit-profile/1', data={'username': 'adminek', 'email': 'admin@test.com', 'role': 3}, follow_redirects=True)
         self.assertTrue(resp.status_code, 200)
         self.assertTrue('The profile has been updated.' in resp.get_data(as_text=True))
 
@@ -172,7 +181,7 @@ class AdminTestCase(unittest.TestCase):
         self.assertTrue(resp.status_code, 200)
         self.assertTrue('The profile has been updated.' in resp.get_data(as_text=True))
 
-    #  TEST control_panel/posts
+    # TEST control_panel/posts
     def test_posts_list_cp(self):
         #  log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
@@ -198,7 +207,7 @@ class AdminTestCase(unittest.TestCase):
             'short_desc': 'Short desc',
             'body': 'Testing the body of post!',
             'game': 0,
-            'tags': 'tag1,tag2',
+            'tags': 'tag1,tag2',  # Add one exisitng tag and one new
             'published': True},
             follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
@@ -302,7 +311,8 @@ class AdminTestCase(unittest.TestCase):
         #  add tag
         resp = self.client.get('/control-panel/add-tag')
         self.assertEqual(resp.status_code, 308)
-        resp = self.client.post('/control-panel/add-tag', data={'name': 'tag1'}, follow_redirects=True)
+
+        resp = self.client.post('/control-panel/add-tag', data={'name': 'tag3'}, follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('tag1' in resp.get_data(as_text=True))
 
@@ -372,3 +382,63 @@ class AdminTestCase(unittest.TestCase):
         resp = self.client.get('control-panel/delete-community/1', follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Społeczność została usunięta' in resp.get_data(as_text=True))
+
+    def test_edit_pages_content(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+
+        #  attempt to edit the wrong textfield
+        resp = self.client.get('/control-panel/edit-page/wrong')
+        self.assertEqual(resp.status_code, 404)
+
+        #  edit about us page
+        resp = self.client.get('/control-panel/edit-page/about_us_page')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.post('/control-panel/edit-page/about_us_page', data={'body': 'O nas test'}, follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('&#34;about_us_page&#34; zostało zaktualizowane.' in resp_text)
+        self.assertTrue('O nas test' in resp_text)
+
+        #  edit contact page
+        resp = self.client.get('/control-panel/edit-page/contact_page')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.post('/control-panel/edit-page/contact_page', data={'body': 'Kontakt test'},
+                                follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('&#34;contact_page&#34; zostało zaktualizowane.' in resp_text)
+        self.assertTrue('Kontakt test' in resp_text)
+
+        #  edit privacy policy page
+        resp = self.client.get('/control-panel/edit-page/privacy_policy_page')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.post('/control-panel/edit-page/privacy_policy_page', data={'body': 'Polityka prywatności test'},
+                                follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('&#34;privacy_policy_page&#34; zostało zaktualizowane.' in resp_text)
+        self.assertTrue('Polityka prywatności test' in resp_text)
+
+    def test_edit_textfield(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+        #  attempt to edit the wrong textfield
+        resp = self.client.get('/control-panel/edit-textfield/wrong')
+        self.assertEqual(resp.status_code, 404)
+
+        #  edit communities_page textfield
+        resp = self.client.get('/control-panel/edit-textfield/communities_page')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.post('/control-panel/edit-textfield/communities_page', data={'body': 'Communities_page test'},
+                                follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('Pole communities_page zostało zaktualizowane.' in resp_text)
+        self.assertTrue('Communities_page test' in resp_text)

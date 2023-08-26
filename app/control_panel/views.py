@@ -421,16 +421,12 @@ def edit_pages_content(page_name):
     form = EditTextForm()
 
     if form.validate_on_submit():
-        if not p_cont:
-            p_cont = Textfield(body=form.body.data)
-        else:
-            p_cont.body = form.body.data
+        p_cont.body = form.body.data
         db.session.add(p_cont)
         db.session.commit()
         flash(f'"{page_name}" zostało zaktualizowane.')
 
-    if p_cont:
-        form.body.data = p_cont.body
+    form.body.data = p_cont.body
 
     return render_template('control_panel/edit_pages_content.html', title=page_name, form=form)
 
@@ -440,6 +436,8 @@ def edit_pages_content(page_name):
 @login_required
 def edit_textfield(field):
     textfield = db.session.execute(db.select(Textfield).filter_by(name=field)).scalar_one_or_none()
+    if not textfield:
+        abort(404)
     form = EditTextForm()
 
     if form.validate_on_submit():
