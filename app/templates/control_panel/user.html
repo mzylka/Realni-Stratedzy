@@ -11,19 +11,10 @@
     <a href="{{ url_for('.auth.new_password') }}">Zmień hasło</a>
     {% endif %}
     {% if current_user.is_administrator() %}
-    <a href="{{ url_for('.auth.new_password', id=user.id) }}">Zmień hasło [A]</a>
+    <a href="{{ url_for('.auth.set_new_password', id=user.id) }}">Zmień hasło [A]</a>
     {% endif %}
     {% if current_user.is_administrator() %}
     <a href="{{ url_for('.auth.delete_user', id=user.id) }} " onclick="return confirm('Czy jesteś pewien, że chcesz usunąć usera?');">Usuń użytkownika</a>
     {% endif %}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
 </div>
 {% endblock %}

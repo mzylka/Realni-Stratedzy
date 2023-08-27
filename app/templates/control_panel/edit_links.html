@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Edytuj Linki - {% endblock %}
+{% block main %}
+{% import "_macros.html" as macros %}
+{{ macros.render_back_to_panel() }}
+<div class="bg-zinc-800 px-6 py-6">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="mb-2 p-2 bg-red-600">
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <form class="block justify-self-center mx-auto" method="POST">
+        <div class="">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.discord_link.label }}
+                {{ form.discord_link(placeholder='Discord',class="w-full mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.fb_link.label }}
+                {{ form.fb_link(placeholder='Facebook', class="w-full mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.twitter_link.label }}
+                {{ form.twitter_link(placeholder='Twitter', class="w-full mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.yt_link.label }}
+                {{ form.yt_link(placeholder='YouTube', class="w-full mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.twitch_link.label }}
+                {{ form.twitch_link(placeholder='Twitch', class="w-full mb-4 shadow appearance-none border rounded text-black") }}
+            </div>
+            <div class="mt-4">{{ form.submit(placeholder="Zapisz zmiany", class="block mx-auto bg-zinc-700 hover:bg-zinc-600 transition text-white font-bold py-2 px-4 rounded cursor-pointer") }}</div>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

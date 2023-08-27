@@ -37,3 +37,9 @@ class NewPassForm(FlaskForm):
     def validate_new_password(self, field):
         if field.data == self.old_password.data:
             raise ValidationError('Nowe hasło nie może być takie same jak stare!')
+
+
+class NewPassFormA(FlaskForm):
+    new_password = PasswordField('Nowe hasło', validators=[DataRequired(), EqualTo('new_password2', message='Hasła nie są takie same!')])
+    new_password2 = PasswordField('Potwierdź nowe hasło', validators=[DataRequired()])
+    submit = SubmitField('Ustaw nowe hasło')

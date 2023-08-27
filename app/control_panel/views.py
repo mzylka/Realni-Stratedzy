@@ -1,8 +1,9 @@
 from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from .. import db
-from ..models import Role, User, Post, Game, Tag, Community, Textfield
-from .forms import EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm, AddCommunityForm, EditCommunityForm, EditTextForm
+from ..models import Role, User, Post, Game, Tag, Community, Textfield, Link
+from .forms import (EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm, EditPostForm, AddTagForm, EditTagForm,
+                    AddCommunityForm, EditCommunityForm, EditTextForm, EditLinkForm)
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
 from ..helpers import upload_img
@@ -449,3 +450,44 @@ def edit_textfield(field):
     form.body.data = textfield.body
 
     return render_template('control_panel/edit_textfield.html', form=form, field_name=textfield.name)
+
+
+@control_panel.route('/edit-links/', methods=['GET', 'POST'])
+@content_editor_required
+@login_required
+def edit_links():
+    links = db.session.execute(db.select(Link)).scalars()
+    if not links:
+        abort(404)
+    form = EditLinkForm()
+
+    if form.validate_on_submit():
+        for link in links:
+            if link.name == 'discord':
+                link.content = form.discord_link.data
+            elif link.name == 'facebook':
+                link.content = form.fb_link.data
+            elif link.name == 'twitter':
+                link.content = form.twitter_link.data
+            elif link.name == 'youtube':
+                link.content = form.yt_link.data
+            elif link.name == 'twitch':
+                link.content = form.twitch_link.data
+
+        db.session.add_all(links)
+        db.session.commit()
+        flash('Linki zostały zaktualizowane.')
+
+    for li in links:
+        if li.name == 'discord':
+            form.discord_link.data = li.content
+        elif li.name == 'facebook':
+            form.fb_link.data = li.content
+        elif li.name == 'twitter':
+            form.twitter_link.data = li.content
+        elif li.name == 'youtube':
+            form.yt_link.data = li.content
+        elif li.name == 'twitch':
+            form.twitch_link.data = li.content
+
+    return render_template('control_panel/edit_links.html', form=form)

@@ -104,3 +104,12 @@ class EditCommunityForm(AddCommunityForm):
 class EditTextForm(FlaskForm):
     body = CKEditorField('Treść', validators=[DataRequired()])
     submit = SubmitField('Edytuj o nas')
+
+
+class EditLinkForm(FlaskForm):
+    discord_link = StringField('Discord', validators=[DataRequired(), Length(1, 256)])
+    fb_link = StringField('Facebook', validators=[DataRequired(), Length(1, 256)])
+    twitter_link = StringField('Twitter', validators=[DataRequired(), Length(1, 256)])
+    yt_link = StringField('Youtube', validators=[DataRequired(), Length(1, 256)])
+    twitch_link = StringField('Twitch', validators=[DataRequired(), Length(1, 256)])
+    submit = SubmitField('Zapisz zmiany')

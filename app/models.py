@@ -91,6 +91,14 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def set_new_password_a(self, new_password):
+        if self.verify_password(new_password):
+            return False
+        else:
+            self.password = new_password
+            db.session.add(self)
+            return True
+
     def set_new_password(self, old_password, new_password):
         if self.verify_password(old_password):
             self.password = new_password
@@ -245,3 +253,25 @@ class Textfield(db.Model):
             db.session.add(textfield)
         db.session.commit()
 
+
+class Link(db.Model):
+    __tablename__ = 'links'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    content = db.Column(db.String(256))
+
+    @staticmethod
+    def insert_links():
+        links = {
+            'discord': 'https://',
+            'facebook': 'https://',
+            'twitter': 'https://',
+            'youtube': 'https://',
+            'twitch': 'https://'
+        }
+        for li in links:
+            link = db.session.execute(db.select(Link).filter_by(name=li)).scalar_one_or_none()
+            if link is None:
+                link = Link(name=li, content=links[li])
+            db.session.add(link)
+        db.session.commit()

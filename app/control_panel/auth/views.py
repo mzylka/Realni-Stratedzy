@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, flash, abort
 from flask_login import login_user, login_required, current_user, logout_user
 from . import auth
 from ...models import User
-from .forms import LoginForm, RegistrationForm, NewPassForm
+from .forms import LoginForm, RegistrationForm, NewPassForm, NewPassFormA
 from ... import db
 from ...decorators import admin_required
 
@@ -73,3 +73,22 @@ def delete_user(id):
     db.session.commit()
     flash(f'Użytkownik {username} został usunięty')
     return redirect(url_for('control_panel.users'))
+
+
+@auth.route('/set-new-password/<int:id>', methods=['GET', 'POST'])
+@admin_required
+@login_required
+def set_new_password(id):
+    user = db.get_or_404(User, id)
+    form = NewPassFormA()
+
+    if form.validate_on_submit():
+        if user.set_new_password_a(form.new_password.data):
+            db.session.commit()
+            flash(f'Hasło {user.username} zostało zmienione!')
+            return redirect(url_for('control_panel.user', username=user.username))
+        else:
+            flash('Hasło nie może być takie samo jak stare!')
+            return redirect(url_for('control_panel.auth.set_new_password', id=id))
+
+    return render_template('control_panel/auth/new_password.html', form=form)
