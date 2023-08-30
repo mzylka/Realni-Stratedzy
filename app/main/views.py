@@ -6,7 +6,7 @@ from .forms import SearchForm, GamesFilterForm, CommunitiesFilterForm
 from sqlalchemy import desc, nulls_first, nulls_last
 
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/')
 def index():
     searched = request.args.get('search')
     page = None
@@ -53,7 +53,6 @@ def game(slug):
 #  Games list
 @main.route('/gry/', methods=['GET', 'POST'])
 def games():
-    textfield = db.session.execute(db.select(Textfield).filter_by(name='games_page')).scalar_one_or_none()
     form = GamesFilterForm()
     order_arg = Game._title
 
@@ -73,20 +72,20 @@ def games():
 
         games = db.select(Game).filter_by(published=True).order_by(order_arg)
         page = db.paginate(games)
-        return render_template('main/games.html', page=page, form=form, description=textfield.body)
+        return render_template('main/games.html', page=page, form=form)
 
     games = db.select(Game).filter_by(published=True).order_by(order_arg)
     page = db.paginate(games)
-    return render_template('main/games.html', page=page, form=form, description=textfield.body)
+    return render_template('main/games.html', page=page, form=form)
 
 
 #  Posts list filtered by tag
 @main.route('/tag/<slug>')
 def tag(slug):
     tag = db.session.execute(db.select(Tag).filter_by(slug_name=slug)).scalar_one_or_none()
-    page = db.paginate(tag.posts)
     if not tag:
         abort(404)
+    page = db.paginate(tag.posts)
     return render_template('index.html', page=page)
 
 

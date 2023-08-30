@@ -4,17 +4,7 @@
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
 <div class="bg-zinc-800 px-6 py-6">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="mb-2 p-2 bg-red-600">
-        <ul class="flashes">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% endwith %}
+    {{ macros.render_flashed_messages() }}
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div>
             {% for err in form.thumb.errors %}

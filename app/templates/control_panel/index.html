@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Panel kontrolny - {% endblock %}
 {% block main %}
+{% import "_macros.html" as macros %}
 <div class="cp_user flex bg-zinc-800 mb-2 p-2">
     <div class="p-1">Zalogowano jako {{ current_user.username }}</div>
     <a class="block ml-2 p-1 bg-zinc-700" href="{{ url_for('.auth.logout') }}">Wyloguj</a>
 </div>
+{{ macros.render_flashed_messages() }}
 <div class="flex flex-wrap bg-zinc-800 px-6 py-6">
     <div class="m-4 p-2 bg-zinc-700 hover:bg-zinc-600 transition rounded-lg">
         <a class="block" href="{{ url_for('.posts_list') }}">

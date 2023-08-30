@@ -4,6 +4,7 @@
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
 <div class="bg-zinc-800 px-6 py-6">
+    {{ macros.render_flashed_messages() }}
     <form class="block justify-self-center mx-auto" method="POST" enctype="multipart/form-data">
         <div>
             {% for err in form.thumb.errors %}
