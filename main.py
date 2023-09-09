@@ -8,7 +8,8 @@ from app.models import User, Role, Post, Tag, Textfield, Link
 from flask_migrate import Migrate, upgrade
 from app.models import Permission
 
-load_dotenv()
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
@@ -65,3 +66,4 @@ def deploy():
 
     Role.insert_roles()
     Textfield.insert_textfields()
+    Link.insert_links()

@@ -1,5 +1,8 @@
 import os
+from dotenv import load_dotenv
+
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config:
@@ -20,7 +23,6 @@ class Config:
 
     FLASKY_POSTS_PER_PAGE = 20
 
-    CKEDITOR_SERVE_LOCAL = True
     CKEDITOR_PKG_TYPE = "standard"
     CKEDITOR_FILE_UPLOADER = 'upload_cke'
     UPLOAD_FOLDER_ABS = os.path.join(basedir, 'files')
