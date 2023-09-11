@@ -54,4 +54,5 @@
 {{ super() }}
 {{ ckeditor.load() }}
 {{ ckeditor.config(name='body', height=700) }}
+<script src="{{ url_for('static', filename='dist/tags.bundle.js', _external=True) }}"></script>
 {% endblock %}

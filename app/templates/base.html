@@ -53,7 +53,7 @@
     {% block scripts %}
     {{ moment.include_moment() }}
     {{ moment.locale("pl") }}
-    <script src="{{ url_for('static', filename='dist/main.js', _external=True) }}"></script>
+    <script src="{{ url_for('static', filename='dist/index.bundle.js', _external=True) }}"></script>
     {% endblock %}
 </body>
 </html>
