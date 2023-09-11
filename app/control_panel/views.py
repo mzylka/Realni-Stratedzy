@@ -71,7 +71,7 @@ def add_post():
     form = AddPostForm()
     tags_q = db.session.execute(db.select(Tag._name).order_by(Tag._name)).all()
     tags_list = [tag[0] for tag in tags_q]
-    print(tags_q)
+
     if form.validate_on_submit():
         tags = form.tags.data.split(',')
         strip_tags = set([i.strip() for i in tags])
@@ -96,7 +96,7 @@ def add_post():
         flash('Post został dodany.')
         return redirect(url_for('.posts_list'))
 
-    return render_template('control_panel/add_post.html', form=form, tags_list=tags_list)
+    return render_template('control_panel/add_post.html', form=form, tags_list=tags_list, title='Dodaj post')
 
 
 @control_panel.route('/edit-post/<int:id>', methods=['GET', 'POST'])
@@ -105,6 +105,8 @@ def add_post():
 def edit_post(id):
     form = EditPostForm()
     post = Post.query.get_or_404(id)
+    tags_q = db.session.execute(db.select(Tag._name).order_by(Tag._name)).all()
+    tags_list = [tag[0] for tag in tags_q]
 
     if not current_user.is_post_author(post) and not current_user.is_administrator():
         abort(403)
@@ -154,7 +156,7 @@ def edit_post(id):
     form.game.data = post.game_id
     form.tags.data = ','.join(post_tags)
     form.published.data = post.published
-    return render_template('control_panel/add_post.html', form=form, thumb=post.thumb_name)
+    return render_template('control_panel/add_post.html', form=form, thumb=post.thumb_name, tags_list=tags_list, title='Edytuj post')
 
 
 @control_panel.route('/delete-post/<int:id>')
@@ -208,7 +210,7 @@ def add_game():
         return redirect(url_for('.games_list'))
     else:
         print(form.errors)
-    return render_template('control_panel/add_game.html', form=form)
+    return render_template('control_panel/add_game.html', form=form, title='Dodaj grę')
 
 
 @control_panel.route('/edit-game/<int:id>', methods=['GET', 'POST'])
@@ -250,7 +252,7 @@ def edit_game(id):
     form.reddit_link.data = game.reddit_link
     form.discord_link.data = game.discord_link
     form.published.data = game.published
-    return render_template('control_panel/add_game.html', form=form, thumb=game.thumb_name)
+    return render_template('control_panel/add_game.html', form=form, thumb=game.thumb_name, title='Edytuj grę')
 
 
 @control_panel.route('/delete-game/<int:id>')
@@ -295,7 +297,7 @@ def add_tag():
         db.session.commit()
         flash('Tag został dodany.')
         return redirect(url_for('.tags_list'))
-    return render_template('control_panel/add_tag.html', form=form)
+    return render_template('control_panel/add_tag.html', form=form, title='Dodaj tag')
 
 
 @control_panel.route('/edit-tag/<int:id>', methods=['GET', 'POST'])
@@ -311,7 +313,7 @@ def edit_tag(id):
         flash('Tag został zaktualizowany.')
         return redirect(url_for('.tags_list'))
     form.name.data = tag.name
-    return render_template('control_panel/add_tag.html', form=form)
+    return render_template('control_panel/add_tag.html', form=form, title='Edytuj tag')
 
 
 @control_panel.route('/delete-tag/<int:id>')
@@ -353,7 +355,7 @@ def add_community():
         flash("Społeczność została dodana.")
         return redirect(url_for('.communities_list'))
 
-    return render_template('control_panel/add_community.html', form=form)
+    return render_template('control_panel/add_community.html', form=form, title='Dodaj społeczność')
 
 
 @control_panel.route('/edit-community/<int:id>', methods=['GET', 'POST'])
@@ -391,7 +393,7 @@ def edit_community(id):
     form.fb_link.data = community.fb_link
     form.published.data = community.published
 
-    return render_template('control_panel/add_community.html', form=form)
+    return render_template('control_panel/add_community.html', form=form, title='Edytuj społeczność')
 
 
 @control_panel.route('/delete-community/<int:id>')
