@@ -1,4 +1,5 @@
 import os
+from flask import current_app as app
 from werkzeug.utils import secure_filename
 
 
@@ -8,7 +9,7 @@ def upload_img(file, prefix, type='thumbnail'):
         extension = filename.split(".")[-1]
         if prefix and type:
             name = prefix + f'_{type}.' + extension
-            file.save(os.path.join(f'files/{type}s', name))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER_ABS'], f'{type}s', name))
             return name
         else:
             return False

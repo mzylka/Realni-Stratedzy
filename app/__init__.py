@@ -42,7 +42,7 @@ def create_app(config_name):
     @app.route('/upload-cke', methods=['GET', 'POST'])
     def upload_cke():
         f = request.files.get('upload')
-        upload_folder = os.path.join(app.config['UPLOAD_FOLDER'], 'cke_images')
+        upload_folder = os.path.join(app.config['UPLOAD_FOLDER_ABS'], 'cke_images')
         if f.filename in os.listdir(upload_folder):
             return upload_fail(message="The image with the same name already exists on the server! Please change the name of the image!")
         if not allowed_file(f.filename):
