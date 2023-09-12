@@ -3,7 +3,7 @@
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
-<div class="bg-gray-800 px-6 py-6">
+<div class="bg-zinc-800 px-6 py-6">
     {{ macros.render_flashed_messages() }}
     <h2>{{ user.username }} {% if user.is_administrator() %}[ADMIN]{% endif %}</h2>
     <p>Dołączył: {{ moment(user.member_since).fromNow() }}</p>
