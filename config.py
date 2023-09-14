@@ -25,6 +25,7 @@ class Config:
 
     CKEDITOR_PKG_TYPE = "standard"
     CKEDITOR_FILE_UPLOADER = 'upload_cke'
+    CKEDITOR_SERVE_LOCAL = True
     UPLOAD_FOLDER_ABS = os.path.join(basedir, 'files')
     UPLOAD_FOLDER = 'files'
     ALLOWED_EXTENSIONS = {'jpg', 'png', 'webp'}
