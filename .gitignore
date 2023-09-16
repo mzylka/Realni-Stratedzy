@@ -3,6 +3,7 @@ files/cke_images/**
 files/logos/**
 files/thumbnails/**
 app/static/node_modules/
+app/fake.py
 __pycache__/
 data-dev.sqlite
 profiler/
