@@ -4,7 +4,7 @@
 <div class="base-content flex-col bg-zinc-800 px-6 py-6">
   <div class="base-content__top flex flex-col lg:flex-row">
     <div class="base-content__left grow pr-4">
-      <div class="base-content__thumb mb-4"><img class="mx-auto lg:m-0" src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title }}"></div>
+      <div class="base-content__thumb mb-4"><img class="mx-auto" src="{{ url_for('uploaded_files', folder='thumbnails', filename=game.thumb_name) }}" alt="{{ game.title }}"></div>
       <div class="base-content__title text-3xl lg:text-4xl my-2 font-semibold"><h1>{{ game.title }}</h1></div>
       <div class="game-producer text-gray-300">Producent: {{ game.producer }}</div>
       <div class="game-release-date text-gray-300">Data premiery: {% if game.release_date %}{{ moment(game.release_date).format('LL') }}{% else %}TBD{% endif %}</div>

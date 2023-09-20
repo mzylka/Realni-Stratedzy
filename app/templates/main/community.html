@@ -4,7 +4,7 @@
 <div class="base-content flex-col bg-zinc-800 px-6 py-6">
   <div class="base-content__top flex flex-col lg:flex-row">
     <div class="base-content__left pr-4 grow">
-      <div class="base-content__thumb mb-4"><img class="mx-auto lg:m-0" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
+      <div class="base-content__thumb mb-4"><img class="mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
       <div class="base-content__title text-3xl lg:text-4xl my-2 font-semibold"><h1>{{ community.title }}</h1></div>
       {% if community.game %}
       <div class="community-game text-gray-300">Gra: <a class="text-sky-400 hover:text-red-600" href="{{ url_for('main.game', slug=community.game.slug) }}">{{ community.game.title }}</a></div>
