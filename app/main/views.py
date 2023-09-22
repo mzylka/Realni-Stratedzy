@@ -45,9 +45,11 @@ def post(slug):
 @main.route('/gra/<slug>')
 def game(slug):
     game = db.session.execute(db.select(Game).filter_by(slug_title=slug)).scalar_one_or_none()
+    g_posts = game.posts.first()
+    g_communities = game.communities.first()
     if not game:
         abort(404)
-    return render_template('main/game.html', game=game)
+    return render_template('main/game.html', game=game, has_posts=g_posts, has_communities=g_communities)
 
 
 #  Games list
