@@ -24,10 +24,10 @@ def index():
 #  Posts for specified game
 @main.route('/posty/<game_slug>')
 def posts(game_slug):
-    gra = db.session.execute(db.select(Game).filter_by(slug_title=game_slug)).scalar_one_or_none()
-    if not gra:
+    game = db.session.execute(db.select(Game).filter_by(slug_title=game_slug)).scalar_one_or_none()
+    if not game:
         abort(404)
-    posts = db.select(Post).filter_by(published=True).where(Post.game_id == gra.id).order_by(Post.timestamp)
+    posts = db.select(Post).filter_by(published=True).where(Post.game_id == game.id).order_by(Post.timestamp)
     page = db.paginate(posts)
     return render_template('index.html', page=page)
 
@@ -127,6 +127,8 @@ def communities(game_slug=None):
     communities = None
     if game_slug:
         game = db.session.execute(db.select(Game).filter_by(slug_title=game_slug, published=True)).scalar_one_or_none()
+        if not game:
+            abort(404)
         communities = game.communities
     else:
         communities = db.select(Community).filter_by(published=True).order_by(order_arg)
@@ -154,7 +156,6 @@ def contact():
 @main.route('/polityka-prywatnosci/')
 def privacy_policy():
     content = db.session.execute(db.select(Textfield).filter_by(name='privacy_policy_page')).scalar_one_or_none()
-    print(content)
     if not content:
         abort(404)
     return render_template('main/page_content.html', title='Polityka Prywatności', page_content=content)
