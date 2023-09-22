@@ -25,6 +25,11 @@ iframe {
     margin: auto;
 }
 
+.post__body ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
 .base-content__body p {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -33,4 +38,9 @@ iframe {
 
 .base-content__body p img {
     margin: auto;
+}
+
+.base-content__body ul {
+    list-style-type: disc;
+    list-style-position: inside;
 }

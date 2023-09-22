@@ -32,12 +32,12 @@
             </div>
             <div>
                 <p>Tagi:</p>
-                <span class="block">Odzielaj tagi przecinkiem bez spacji (np. tag1,tag2,tag3)</span>
+                <span class="block">Oddzielaj tagi przecinkiem bez spacji (np. tag1,tag2,tag3)</span>
                 {{ form.tags(placeholder="Tagi", id="add_post-input_tags", class="w-full h-10 mb-4 shadow appearance-none border rounded text-black") }}
                 <span>Lista tagów: </span>
                 <div id="add_post-tags_list">
                     {% for t in tags_list %}
-                    <button class="bg-zinc-700 p-1">{{ t }}</button>
+                    <button class="bg-zinc-700 p-1 m-1">{{ t }}</button>
                     {% endfor %}
                 </div>
             </div>

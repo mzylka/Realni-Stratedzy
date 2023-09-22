@@ -277,7 +277,7 @@ def show_game(id):
 @control_panel.route('/tags')
 @login_required
 def tags_list():
-    tags = db.select(Tag).order_by(Tag._name.desc())
+    tags = db.select(Tag).order_by(Tag._name)
     page = db.paginate(tags)
     return render_template('control_panel/tags_list.html', page=page)
 
