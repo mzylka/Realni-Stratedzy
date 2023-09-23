@@ -38,6 +38,8 @@ def post(slug):
     post = db.session.execute(db.select(Post).filter_by(slug_title=slug)).scalar_one_or_none()
     if not post:
         abort(404)
+    if not post.published:
+        abort(403)
     return render_template('main/post.html', post=post)
 
 
@@ -45,10 +47,12 @@ def post(slug):
 @main.route('/gra/<slug>')
 def game(slug):
     game = db.session.execute(db.select(Game).filter_by(slug_title=slug)).scalar_one_or_none()
-    g_posts = game.posts.first()
-    g_communities = game.communities.first()
     if not game:
         abort(404)
+    if not game.published:
+        abort(403)
+    g_posts = game.posts.first()
+    g_communities = game.communities.first()
     return render_template('main/game.html', game=game, has_posts=g_posts, has_communities=g_communities)
 
 
@@ -97,6 +101,8 @@ def community(slug):
     community = db.session.execute(db.select(Community).filter_by(slug_title=slug)).scalar_one_or_none()
     if not community:
         abort(404)
+    if not community.published:
+        abort(403)
     return render_template('main/community.html', community=community)
 
 

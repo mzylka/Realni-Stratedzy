@@ -93,7 +93,7 @@ class AddCommunityForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.game.choices = [(game.id, game.title) for game in db.session.execute(db.select(Game).order_by(Game._title)).scalars()]
+        self.game.choices = [(game.id, game.title) for game in db.session.execute(db.select(Game).filter_by(published=True).order_by(Game._title)).scalars()]
         self.game.choices.append(("0", 'Nie dotyczy'))
 
 
