@@ -30,6 +30,26 @@ iframe {
     list-style-position: inside;
 }
 
+.post__body ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.post__body h1 {
+    font-size: 1.875rem; /* 30px */
+    line-height: 2.25rem; /* 36px */
+}
+
+.post__body h2 {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2rem; /* 32px */
+}
+
+.post__body h3 {
+    font-size: 1.25rem; /* 24px */
+    line-height: 1.75rem; /* 32px */
+}
+
 .base-content__body p {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -43,4 +63,19 @@ iframe {
 .base-content__body ul {
     list-style-type: disc;
     list-style-position: inside;
+}
+
+.base-content__body h1 {
+    font-size: 1.875rem; /* 30px */
+    line-height: 2.25rem; /* 36px */
+}
+
+.base-content__body h2 {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2rem; /* 32px */
+}
+
+.base-content__body h3 {
+    font-size: 1.25rem; /* 24px */
+    line-height: 1.75rem; /* 32px */
 }
