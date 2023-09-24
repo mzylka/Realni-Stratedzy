@@ -37,17 +37,15 @@ iframe {
 
 .post__body h1 {
     font-size: 1.875rem; /* 30px */
-    line-height: 2.25rem; /* 36px */
+    line-height: normal;
 }
 
 .post__body h2 {
     font-size: 1.5rem; /* 24px */
-    line-height: 2rem; /* 32px */
 }
 
 .post__body h3 {
     font-size: 1.25rem; /* 24px */
-    line-height: 1.75rem; /* 32px */
 }
 
 .base-content__body p {
@@ -67,15 +65,15 @@ iframe {
 
 .base-content__body h1 {
     font-size: 1.875rem; /* 30px */
-    line-height: 2.25rem; /* 36px */
+    line-height: inherit;
 }
 
 .base-content__body h2 {
     font-size: 1.5rem; /* 24px */
-    line-height: 2rem; /* 32px */
+    line-height: inherit;
 }
 
 .base-content__body h3 {
     font-size: 1.25rem; /* 24px */
-    line-height: 1.75rem; /* 32px */
+    line-height: inherit;
 }
