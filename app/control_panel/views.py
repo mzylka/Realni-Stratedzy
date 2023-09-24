@@ -415,7 +415,7 @@ def show_community(id):
 
 
 @control_panel.route('/edit-page/<page_name>', methods=['GET', 'POST'])
-@content_editor_required
+@admin_required
 @login_required
 def edit_pages_content(page_name):
     p_cont = db.session.execute(db.select(Textfield).filter_by(name=page_name)).scalar_one_or_none()
@@ -435,7 +435,7 @@ def edit_pages_content(page_name):
 
 
 @control_panel.route('/edit-textfield/<field>', methods=['GET', 'POST'])
-@content_editor_required
+@admin_required
 @login_required
 def edit_textfield(field):
     textfield = db.session.execute(db.select(Textfield).filter_by(name=field)).scalar_one_or_none()
@@ -455,7 +455,7 @@ def edit_textfield(field):
 
 
 @control_panel.route('/edit-links/', methods=['GET', 'POST'])
-@content_editor_required
+@admin_required
 @login_required
 def edit_links():
     links = db.session.execute(db.select(Link)).scalars()

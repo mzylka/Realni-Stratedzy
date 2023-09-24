@@ -33,6 +33,7 @@
             <p>Lista społeczności i związane z nimi akcje</p>
         </a>
     </div>
+    {% if current_user.is_administrator() %}
     <div class="m-4 p-2 bg-zinc-700 hover:bg-zinc-600 transition rounded-lg">
         <a class="block" href="{{ url_for('.users') }}">
             <h3 class="font-semibold text-lg uppercase">Użytkownicy</h3>
@@ -69,6 +70,7 @@
             <p>Edycja linków do Sociali</p>
         </a>
     </div>
+    {% endif %}
     {% endif %}
 </div>
 
