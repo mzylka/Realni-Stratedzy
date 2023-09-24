@@ -32,12 +32,27 @@
 </div>
 {% endmacro %}
 
+{% macro render_element_of_cp_lists_posts(element, edit=None, show=None, delete=None) %}
+<div class="element my-4 p-2 bg-zinc-700">
+    <div class="mb-1 border-b"><h3 class="text-xl font-semibold">{{ element._title or element.name }}</h3></div>
+    <div>ID: {{ element.id }} | Opublikowany: {% if element.published %}Tak{% else %}Nie{% endif %}</div>
+    {% if element.author == current_user or current_user.is_administrator() %}
+    <div class="mt-2"><a class="hover:text-sky-400 transition" href="{{ url_for(edit, id=element.id) }}">Edytuj</a></div>
+    <div><a class="hover:text-sky-400 transition" href="{{ url_for(delete, id=element.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz to usunąć');">Usuń</a></div>
+    {% endif %}
+    {% if show %}<div><a class="hover:text-sky-400 transition" href="{{ url_for(show, id=element.id) }}">Podejrzyj</a></div>{% endif %}
+</div>
+{% endmacro %}
+
 {% macro render_element_of_cp_lists(element, edit=None, show=None, delete=None) %}
 <div class="element my-4 p-2 bg-zinc-700">
     <div class="mb-1 border-b"><h3 class="text-xl font-semibold">{{ element._title or element.name }}</h3></div>
-    {% if element.author == current_user or current_user.is_administrator() %}
+    <div>ID: {{ element.id }} | Opublikowany: {% if element.published %}Tak{% else %}Nie{% endif %}</div>
+    {% if current_user.is_content_editor() %}
     <div class="mt-2"><a class="hover:text-sky-400 transition" href="{{ url_for(edit, id=element.id) }}">Edytuj</a></div>
     {% if show %}<div><a class="hover:text-sky-400 transition" href="{{ url_for(show, id=element.id) }}">Podejrzyj</a></div>{% endif %}
+    {% endif %}
+    {% if current_user.is_administrator() %}
     <div><a class="hover:text-sky-400 transition" href="{{ url_for(delete, id=element.id) }}" onclick="return confirm('Czy jesteś pewien, że chcesz to usunąć');">Usuń</a></div>
     {% endif %}
 </div>

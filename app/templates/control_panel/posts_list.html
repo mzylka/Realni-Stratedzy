@@ -12,7 +12,7 @@
     </div>
     {% if page %}
     {% for post in page %}
-        {{ macros.render_element_of_cp_lists(post, edit='.edit_post', show='.show_post', delete='.delete_post') }}
+        {{ macros.render_element_of_cp_lists_posts(post, edit='.edit_post', show='.show_post', delete='.delete_post') }}
     {% endfor %}
     {% endif %}
     {{ macros.render_pagination(page, '.posts_list') }}

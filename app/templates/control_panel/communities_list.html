@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Lista społeczności(Panel) - {% endblock %}
 {% block main %}
-{% import "_macros.html" as macros %}
+{% import "_macros.html" as macros with context %}
 {{ macros.render_back_to_panel() }}
 <div class="flex-col bg-zinc-800 px-6 py-6">
     {{ macros.render_flashed_messages() }}
