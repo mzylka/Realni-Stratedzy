@@ -24,6 +24,15 @@
     <meta property="twitter:image" content="https://realnistratedzy.pl/static/images/meta.png" />
     <link rel="icon" href="{{ url_for('static', filename='images/icon.ico', _external=True) }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/style.css', _external=True) }}">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRQ01QXQ7V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KRQ01QXQ7V');
+    </script>
 </head>
 <body class="box-border bg-zinc-900 text-neutral-100">
     {% block header %}
