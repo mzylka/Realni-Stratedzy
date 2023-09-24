@@ -376,7 +376,7 @@ def edit_community(id):
         community.published = form.published.data
 
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, community.slug)
+            thumb_name = upload_img(form.thumb.data, community.slug, type="logo")
             community.thumb_name = thumb_name
 
         db.session.add(community)
