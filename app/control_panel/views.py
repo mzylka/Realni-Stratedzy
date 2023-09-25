@@ -80,6 +80,8 @@ def add_post():
         db.session.add(post)
 
         for tag in strip_tags:
+            if not tag:
+                continue
             existing_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
             if existing_tag:
                 post.tags.append(existing_tag)
@@ -136,8 +138,10 @@ def edit_post(id):
 
         #  Adding tags
         for tag in strip_tags:
-            form_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
+            if not tag:
+                continue
 
+            form_tag = db.session.execute(db.select(Tag).filter_by(_name=tag)).scalar_one_or_none()
             if form_tag is not None and form_tag.name in post_tags:  # If a tag exists in the post's tags
                 continue
             if form_tag:
