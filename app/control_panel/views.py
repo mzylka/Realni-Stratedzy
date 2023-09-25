@@ -6,7 +6,7 @@ from .forms import (EditProfileAdminForm, AddGameForm, EditGameForm, AddPostForm
                     AddCommunityForm, EditCommunityForm, EditTextForm, EditLinkForm)
 from . import control_panel
 from ..decorators import admin_required, content_editor_required, poster_required
-from ..helpers import upload_img
+from ..helpers import upload_img, delete_img
 
 
 # CONTROL_PANEL INDEX
@@ -166,6 +166,7 @@ def delete_post(id):
     post = db.get_or_404(Post, id)
     if not current_user.is_post_author(post) and not current_user.is_administrator():
         abort(403)
+    delete_img(post.thumb_name)
     db.session.delete(post)
     db.session.commit()
     flash('Post został usunięty.')
@@ -201,7 +202,7 @@ def add_game():
                     twitter_link=form.twitter_link.data, fb_link=form.fb_link.data, reddit_link=form.reddit_link.data,
                     discord_link=form.discord_link.data, published=form.published.data)
         f = form.thumb.data
-        thumb_name = upload_img(f, game.slug)
+        thumb_name = upload_img(f, game.slug, type="logo")
         game.thumb_name = thumb_name
 
         db.session.add(game)
@@ -222,7 +223,7 @@ def edit_game(id):
 
     if form.validate_on_submit():
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, game.slug)
+            thumb_name = upload_img(form.thumb.data, game.slug, type="logo")
             game.thumb_name = thumb_name
 
         game.title = form.title.data
@@ -260,6 +261,7 @@ def edit_game(id):
 @login_required
 def delete_game(id):
     game = db.get_or_404(Game, id)
+    delete_img(game.thumb_name, type='logo')
     db.session.delete(game)
     db.session.commit()
     flash('Gra została usunięta.')
@@ -401,6 +403,7 @@ def edit_community(id):
 @login_required
 def delete_community(id):
     community = db.get_or_404(Community, id)
+    delete_img(community.thumb_name, type='logo')
     db.session.delete(community)
     db.session.commit()
     flash('Społeczność została usunięta.')

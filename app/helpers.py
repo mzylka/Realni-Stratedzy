@@ -13,3 +13,11 @@ def upload_img(file, prefix, type='thumbnail'):
             return name
         else:
             return False
+
+
+def delete_img(filename, type='thumbnail'):
+    if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER_ABS'], f'{type}s', filename)):
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER_ABS'], f'{type}s', filename))
+        return True
+    else:
+        return False
