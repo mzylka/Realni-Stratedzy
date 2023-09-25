@@ -118,7 +118,7 @@ def edit_post(id):
 
     if form.validate_on_submit():
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, post.slug)
+            thumb_name = upload_img(form.thumb.data, str(post.id))
             post.thumb_name = thumb_name
         post.title = form.title.data
         post.short_desc = form.short_desc.data
