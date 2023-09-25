@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Edycja obrazków - {% endblock %}
+{% import "_macros.html" as macros %}
+{% block main %}
+{{ macros.render_back_to_panel() }}
+<div class="images">
+    <div class="images__block flex flex-wrap">
+        {% for image in images %}
+        <div class="image overflow-hidden p-2 mb-6 mx-auto max-w-full">
+            <div class="bg-zinc-800 block w-60 h-full p-1 lg:p-2 rounded-lg shadow-md hover:ring-2 ring-red-600 hover:text-sky-400 transition">
+                <div class="image__thumb_block mt-3">
+                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder=foldername, filename=image) }}" alt="{{ image }}">
+                </div>
+                <div class="community__desc_block text-center">
+                    <span class="text-gray-400">{{ image }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="pagination flex bg-zinc-800 rounded-lg my-4">
+  <div class="pagination-left p-2 m-2">
+      {% if current_page > 1 %}
+        <a class="bg-zinc-700 py-2 px-4 hover:text-sky-400 transition-colors rounded" href="{{ url_for('.gallery', foldername=foldername, page=current_page - 1) }}">
+            &laquo;
+        </a>
+      {% endif %}
+  </div>
+  <div class="pagination-main flex justify-center content-center grow p-2">
+      {% if current_page > 1 %}
+      <a class="m-1 p-1 hover:text-sky-400 transition-colors" href="{{ url_for('.gallery', foldername=foldername, page=current_page - 1) }}">
+        {{ current_page - 1 }}
+      </a>
+      {% endif %}
+      <strong class="m-1 p-1 text-sky-400">{{ current_page }}</strong>
+      {% if pages_number > current_page %}
+      <a class="m-1 p-1 hover:text-sky-400 transition-colors" href="{{ url_for('.gallery', foldername=foldername, page=current_page + 1) }}">
+        {{ current_page + 1 }}
+      </a>
+      {% endif %}
+  </div>
+  <div class="pagination-right p-2 m-2">
+      {% if current_page < pages_number %}
+        <a class="bg-zinc-700 py-2 px-4 hover:text-sky-400 transition-colors rounded" href="{{ url_for('.gallery', foldername=foldername, page=current_page + 1) }}">
+            &raquo;
+        </a>
+      {% endif %}
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -1,4 +1,5 @@
-from flask import render_template, redirect, url_for, flash, abort
+import os
+from flask import render_template, redirect, url_for, flash, abort, request, current_app as app
 from flask_login import login_required, current_user
 from .. import db
 from ..models import Role, User, Post, Game, Tag, Community, Textfield, Link
@@ -103,8 +104,8 @@ def add_post():
 @poster_required
 @login_required
 def edit_post(id):
-    form = EditPostForm()
     post = Post.query.get_or_404(id)
+    form = EditPostForm(game=post.game_id)
     tags_q = db.session.execute(db.select(Tag._name).order_by(Tag._name)).all()
     tags_list = [tag[0] for tag in tags_q]
 
@@ -153,7 +154,7 @@ def edit_post(id):
     form.title.data = post.title
     form.short_desc.data = post.short_desc
     form.body.data = post.body
-    form.game.data = post.game_id
+    form.game.data = (post.game_id if post.game_id else 0)
     form.tags.data = ','.join(post_tags)
     form.published.data = post.published
     return render_template('control_panel/add_post.html', form=form, thumb=post.thumb_name, tags_list=tags_list, title='Edytuj post')
@@ -365,7 +366,7 @@ def add_community():
 @login_required
 def edit_community(id):
     community = db.get_or_404(Community, id)
-    form = EditCommunityForm()
+    form = EditCommunityForm(game=community.game_id)
 
     if form.validate_on_submit():
         community.title = form.name.data
@@ -388,7 +389,7 @@ def edit_community(id):
 
     form.name.data = community.title
     form.body.data = community.body
-    form.game.data = community.game_id
+    form.game.data = (community.game_id if community.game_id else 0)
     form.web_link.data = community.web_link
     form.twitter_link.data = community.twitter_link
     form.discord_link.data = community.discord_link
@@ -496,3 +497,30 @@ def edit_links():
             form.twitch_link.data = li.content
 
     return render_template('control_panel/edit_links.html', form=form)
+
+
+@control_panel.route('/gallery/<foldername>')
+@content_editor_required
+@login_required
+def gallery(foldername):
+    page = request.args.get('page', default=1, type=int)
+    imgs_per_page = 30
+    images = os.listdir(os.path.join(app.config['UPLOAD_FOLDER_ABS'], foldername))
+
+    images_number = len(images)
+    has_modulo = 0
+    if images_number % imgs_per_page:
+        has_modulo = 1
+    pages_number = images_number // imgs_per_page + has_modulo
+
+    im = images[(page-1)*imgs_per_page:page*imgs_per_page]
+    return render_template('control_panel/gallery.html', images=im, foldername=foldername, current_page=page, pages_number=pages_number)
+
+
+@control_panel.route('/delete-image/<type>/<filename>')
+@admin_required
+@login_required
+def delete_image(type, filename):
+    delete_img(filename, type=type)
+    flash("Obrazek został usunięty!")
+    return redirect(url_for('.gallery'))

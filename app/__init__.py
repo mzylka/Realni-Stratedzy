@@ -7,6 +7,7 @@ from config import config
 from flask_login import LoginManager
 from flask_pagedown import PageDown
 from flask_ckeditor import CKEditor, upload_success, upload_fail
+from werkzeug.utils import secure_filename
 
 mail = Mail()
 moment = Moment()
@@ -47,9 +48,10 @@ def create_app(config_name):
             return upload_fail(message="The image with the same name already exists on the server! Please change the name of the image!")
         if not allowed_file(f.filename):
             return upload_fail(message='Image Only!')
-        f.save(os.path.join(upload_folder, f.filename))
-        url = url_for('uploaded_files', folder='cke_images', filename=f.filename)
-        return upload_success(url, filename=f.filename)
+        filename = secure_filename(f.filename)
+        f.save(os.path.join(upload_folder, filename))
+        url = url_for('uploaded_files', folder='cke_images', filename=filename)
+        return upload_success(url, filename=filename)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
