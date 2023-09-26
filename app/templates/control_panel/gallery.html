@@ -4,6 +4,7 @@
 {% block main %}
 {{ macros.render_back_to_panel() }}
 <div class="images">
+    {{ macros.render_flashed_messages() }}
     <div class="images__block flex flex-wrap">
         {% for image in images %}
         <div class="image overflow-hidden p-2 mb-6 mx-auto max-w-full">

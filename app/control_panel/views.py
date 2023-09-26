@@ -512,10 +512,10 @@ def gallery(foldername):
     images = os.listdir(os.path.join(app.config['UPLOAD_FOLDER_ABS'], foldername))
 
     images_number = len(images)
-    has_modulo = 0
+    has_remainder = 0
     if images_number % imgs_per_page:
-        has_modulo = 1
-    pages_number = images_number // imgs_per_page + has_modulo
+        has_remainder = 1
+    pages_number = images_number // imgs_per_page + has_remainder
 
     im = images[(page-1)*imgs_per_page:page*imgs_per_page]
     return render_template('control_panel/gallery.html', images=im, foldername=foldername, current_page=page, pages_number=pages_number)
@@ -527,4 +527,4 @@ def gallery(foldername):
 def delete_image(type, filename):
     delete_img(filename, type=type)
     flash("Obrazek został usunięty!")
-    return redirect(url_for('.gallery'))
+    return redirect(url_for('.gallery', foldername=type + "s"))
