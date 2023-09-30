@@ -190,7 +190,7 @@ def show_post(id):
 @control_panel.route('/games')
 @login_required
 def games_list():
-    games = db.select(Game).order_by(Game._title.desc())
+    games = db.select(Game).order_by(Game._title)
     page = db.paginate(games)
     return render_template('control_panel/games_list.html', page=page)
 
@@ -338,7 +338,7 @@ def delete_tag(id):
 @control_panel.route('/communities')
 @login_required
 def communities_list():
-    communities = db.select(Community).order_by(Community._title.desc())
+    communities = db.select(Community).order_by(Community._title)
     page = db.paginate(communities)
     return render_template('control_panel/communities_list.html', page=page)
 
