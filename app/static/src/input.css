@@ -21,6 +21,10 @@ iframe {
     text-align: justify;
 }
 
+.post__body a {
+    color: #38bdf8;
+}
+
 .post__body p img {
     margin: auto;
 }
@@ -52,6 +56,10 @@ iframe {
     margin-top: 1rem;
     margin-bottom: 1rem;
     text-align: justify;
+}
+
+.base-content__body a {
+    color: #38bdf8;
 }
 
 .base-content__body p img {
