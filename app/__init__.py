@@ -33,7 +33,7 @@ def create_app(config_name):
     login_manager.init_app(app)
 
     def allowed_file(filename):
-        return '.' in filename and filename.split('.')[-1].lower() in {'jpg', 'gif', 'png', 'jpeg'}
+        return '.' in filename and filename.split('.')[-1].lower() in {'jpg', 'gif', 'png', 'jpeg', 'webp'}
 
     @app.route('/files/<path:folder>/<path:filename>')
     def uploaded_files(folder, filename):
