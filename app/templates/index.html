@@ -13,7 +13,7 @@
             </div>
             <div class="post__desc_block py-2 lg:py-0 px-2">
                 <h3 class="font-bold text-xl lg:text-2xl uppercase group-hover:text-sky-400">{{ post.title }}</h3>
-                <p class="text-xs text-gray-400 mt-1">{{ moment(post.timestamp).format('LL') }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ moment(post.timestamp).format('LL') }}{% if post.game %} | {{ post.game.title }}{% endif %}</p>
                 <p class="block mt-2">{{ post.short_desc }}</p>
             </div>
         </a>
