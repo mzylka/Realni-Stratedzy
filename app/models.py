@@ -190,7 +190,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     _name = db.Column(db.String(128), unique=True)
     slug_name = db.Column(db.String(128), index=True)
-    posts = db.relationship('Post', secondary=tagging, backref=db.backref('tags', lazy='dynamic'), lazy='dynamic')
+    posts = db.relationship('Post', secondary=tagging, backref=db.backref('tags', lazy='dynamic'), lazy='dynamic', order_by='Post.id.desc()')
 
     @property
     def name(self):
