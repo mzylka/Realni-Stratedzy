@@ -27,7 +27,7 @@ iframe {
 
 .post__body p img {
     margin: auto;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .post__body ul {
@@ -65,7 +65,7 @@ iframe {
 
 .base-content__body p img {
     margin: auto;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .base-content__body ul {
