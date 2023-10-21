@@ -314,7 +314,7 @@ def edit_tag(id):
     form = EditTagForm()
     tag = db.get_or_404(Tag, id)
     if form.validate_on_submit():
-        tag._name = form.name.data
+        tag.name = form.name.data
         db.session.add(tag)
         db.session.commit()
         flash('Tag został zaktualizowany.')
