@@ -91,7 +91,7 @@ def tag(slug):
     tag = db.session.execute(db.select(Tag).filter_by(slug_name=slug)).scalar_one_or_none()
     if not tag:
         abort(404)
-    page = db.paginate(tag.posts)
+    page = db.paginate(tag.posts.filter_by(published=True))
     return render_template('index.html', page=page, title_h='Tag: ' + tag.name + ' - ')
 
 
