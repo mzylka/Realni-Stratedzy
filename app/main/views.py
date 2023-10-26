@@ -29,7 +29,7 @@ def posts(game_slug):
         abort(404)
     posts = db.select(Post).filter_by(published=True).where(Post.game_id == game.id).order_by(Post.timestamp)
     page = db.paginate(posts)
-    return render_template('index.html', page=page)
+    return render_template('index.html', page=page, title_h='Posty: ' + game.title + ' - ')
 
 
 #  Post page
@@ -92,7 +92,7 @@ def tag(slug):
     if not tag:
         abort(404)
     page = db.paginate(tag.posts)
-    return render_template('index.html', page=page)
+    return render_template('index.html', page=page, title_h='Tag: ' + tag.name + ' - ')
 
 
 #  Community page
