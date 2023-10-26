@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block title %}{{ post.title }} - {% endblock %}
+{% block description %}{{ post.short_desc }}{% endblock %}
+{% block description_og %}{{ post.short_desc }}{% endblock %}
+{% block description_t %}{{ post.short_desc }}{% endblock %}
 {% block content %}
 <div class="post_page flex-col bg-zinc-800 px-6 py-6 rounded">
     <div class="post__thumb"><img class="block w-full object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title }}"></div>
