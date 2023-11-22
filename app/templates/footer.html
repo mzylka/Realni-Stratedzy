@@ -15,6 +15,10 @@
             <a class="block hover:text-sky-400 transition-colors" href="{{ url_for('main.privacy_policy') }}">Polityka prywatności i cookies</a>
             <a class="block hover:text-sky-400 transition-colors" href="{{ url_for('main.contact') }}">Kontakt</a>
         </div>
+        <div class="footer__links mb-4 transition-colors lg:w-0 lg:grow">
+            <span class="text-lg font-semibold">Partnerzy:</span>
+            <a class="block hover:text-sky-400 transition-colors" target="_blank" href="https://minecraft.org.pl/minepedia?utm_source=realnistratecdz.pl&utm_medium=footer-link&utm_campaign=minepedia" title="Wiki Minecraft Polska">Minepedia - Polska Wiki Minecraft</a>
+        </div>
         <div class="footer__socials lg:w-0 lg:grow">
             <span class="text-lg font-semibold">Social Media:</span>
             {% for link in social_links %}
