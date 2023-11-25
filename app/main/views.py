@@ -60,22 +60,24 @@ def game(slug):
 @main.route('/gry/', methods=['GET', 'POST'])
 def games():
     form = GamesFilterForm()
+    filtr = request.args.get('filtr', type=int)
+    if filtr:
+        form.filtr.data = filtr
     order_arg = Game._title
     games = None
 
-    if form.validate_on_submit():
-        if form.filtr.data == 1:
+    if filtr:
+        if filtr == 1:
             order_arg = Game.id.desc()
-        elif form.filtr.data == 2:
+        elif filtr == 2:
             order_arg = Game._title
-        elif form.filtr.data == 3:
+        elif filtr == 3:
             order_arg = Game._title.desc()
-        elif form.filtr.data == 4:
-            games = db.select(Game).filter_by(published=True).order_by(desc(Game.release_date.is_(None)), desc(Game.release_date))
-        elif form.filtr.data == 5:
+        elif filtr == 4:
+            games = db.select(Game).filter_by(published=True).order_by(desc(Game.release_date.is_(None)),
+                                                                       desc(Game.release_date))
+        elif filtr == 5:
             games = db.select(Game).filter_by(published=True).order_by(Game.release_date.is_(None), Game.release_date)
-        else:
-            order_arg = Game._title
 
         if games is None:
             games = db.select(Game).filter_by(published=True).order_by(order_arg)
@@ -114,35 +116,32 @@ def community(slug):
 @main.route('/spolecznosci/<game_slug>', methods=['GET', 'POST'])
 def communities(game_slug=None):
     textfield = db.session.execute(db.select(Textfield).filter_by(name='communities_page')).scalar_one_or_none()
+    filtr = request.args.get('filtr', type=int)
     form = CommunitiesFilterForm()
-    if game_slug:
-        form = None
+    if filtr:
+        form.filtr.data = filtr
     order_arg = Community.id.desc()
 
-    if form and form.validate_on_submit():
-        if form.filtr.data == 1:
+    if filtr:
+        if filtr == 1:
             order_arg = Community.id.desc()
-        elif form.filtr.data == 2:
+        elif filtr == 2:
             order_arg = Community._title
-        elif form.filtr.data == 3:
+        elif filtr == 3:
             order_arg = Community._title.desc()
-        else:
-            order_arg = Community.id.desc()
 
-        communities = db.select(Community).filter_by(published=True).order_by(order_arg)
-        page = db.paginate(communities)
-        return render_template('main/communities.html', page=page, form=form, description=textfield.body)
-
-    communities = None
     if game_slug:
         game = db.session.execute(db.select(Game).filter_by(slug_title=game_slug, published=True)).scalar_one_or_none()
         if not game:
             abort(404)
-        communities = game.communities
-    else:
-        communities = db.select(Community).filter_by(published=True).order_by(order_arg)
+        communities = game.communities.order_by(order_arg)
+
+        page = db.paginate(communities)
+        return render_template('main/communities.html', description=textfield.body, page=page, form=form, game_slug=game_slug)
+
+    communities = db.select(Community).filter_by(published=True).order_by(order_arg)
     page = db.paginate(communities)
-    return render_template('main/communities.html', description=textfield.body, page=page, form=form)
+    return render_template('main/communities.html', page=page, form=form, description=textfield.body)
 
 
 #  About page
@@ -178,3 +177,25 @@ def search():
         searched = form.searched.data
         return redirect(url_for('main.index', search=searched))
     return redirect(url_for('main.index'))
+
+
+# Filtering games
+@main.route('/gry/filtruj', methods=['POST'])
+def games_filter():
+    form = GamesFilterForm()
+    if form.validate_on_submit():
+        filtr = form.filtr.data
+        return redirect(url_for('main.games', filtr=filtr))
+    return redirect(url_for('main.games'))
+
+
+@main.route('/spolecznosci/filtruj', methods=['POST'])
+@main.route('/spolecznosci/filtruj/<game>', methods=['POST'])
+def communities_filter(game=None):
+    form = CommunitiesFilterForm()
+    if form.validate_on_submit():
+        filtr = form.filtr.data
+        if game:
+            return redirect(url_for('main.communities', game_slug=game, filtr=filtr))
+        return redirect(url_for('main.communities', filtr=filtr))
+    return redirect(url_for('main.communities'))

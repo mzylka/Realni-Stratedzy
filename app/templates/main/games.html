@@ -5,7 +5,7 @@
 <div class="games">
     <div class="game__form_filter mb-3">
         <div class="game__filter flex justify-center lg:justify-end">
-            <form class="game__filter-form" method="POST" action="{{ url_for('main.games') }}">
+            <form class="game__filter-form" method="POST" action="{{ url_for('main.games_filter') }}">
                 {{ form.hidden_tag() }}
                 {{ form.filtr(class="rounded w-60 p-1 lg:w-44 text-black focus:outline-none focus:ring focus:ring-sky-400") }}
                 {{ form.submit(class="block lg:inline-block w-full lg:w-max bg-zinc-800 rounded mt-4 lg:mt-0 lg:ml-1 p-1 cursor-pointer hover:text-sky-400 transition")}}
