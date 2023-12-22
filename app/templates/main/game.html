@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ game.title }} - {% endblock %}
+{% block og_meta_img %}{{ url_for('uploaded_files', _external=True, folder='logos', filename=game.thumb_name) }}{% endblock %}
+{% block t_meta_img %}{{ url_for('uploaded_files', _external=True, folder='logos', filename=game.thumb_name) }}{% endblock %}
 {% block content %}
 <div class="base-content flex-col bg-zinc-800 px-6 py-6">
   <div class="base-content__top flex flex-col lg:flex-row">
