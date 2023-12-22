@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}Realni Stratedzy</title>
-    {%block meta%}{% endblock %}
+    {% block meta %}{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{% block description %}RealniStratedzy.pl to polska strona o grach RTS i centrum dla społeczności. Najświeższe informacje ze świata strategii czasu rzeczywistego.{% endblock %}">
     <meta name="keywords" content="rts,real time strategy,strategie,strategie czasu rzeczywistego,stormgate,starcraft,warcraft,klany,społeczności">
@@ -14,14 +14,14 @@
     <meta property="og:url" content="https://realnistratedzy.pl" />
     <meta property="og:title" content="{{ self.title() }}Realni Stratedzy" />
     <meta property="og:description" content="{% block description_og %}RealniStratedzy.pl to polska strona o grach RTS i centrum dla społeczności. Najświeższe informacje ze świata strategii czasu rzeczywistego.{% endblock %}" />
-    <meta property="og:image" content="https://realnistratedzy.pl/static/images/meta.png" />
+    <meta property="og:image" content="{% block og_meta_img %}https://realnistratedzy.pl/static/images/meta.png{% endblock %}" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://realnistratedzy.pl" />
     <meta property="twitter:title" content="{{ self.title() }}Realni Stratedzy" />
     <meta property="twitter:description" content="{% block description_t %}RealniStratedzy.pl to polska strona o grach RTS i centrum dla społeczności. Najświeższe informacje ze świata strategii czasu rzeczywistego.{% endblock %}" />
-    <meta property="twitter:image" content="https://realnistratedzy.pl/static/images/meta.png" />
+    <meta property="twitter:image" content="{% block t_meta_img %}https://realnistratedzy.pl/static/images/meta.png{% endblock %}" />
     <link rel="icon" href="{{ url_for('static', filename='images/icon.ico', _external=True) }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/style.css', _external=True) }}">
     <!-- Google tag (gtag.js) -->

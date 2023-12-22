@@ -2,10 +2,12 @@
 {% block title %}{{ post.title }} - {% endblock %}
 {% block description %}{{ post.short_desc }}{% endblock %}
 {% block description_og %}{{ post.short_desc }}{% endblock %}
+{% block og_meta_img %}{{ url_for('uploaded_files', _external=True, folder='thumbnails', filename=post.thumb_name) }}{% endblock %}
 {% block description_t %}{{ post.short_desc }}{% endblock %}
+{% block t_meta_img %}{{ url_for('uploaded_files', _external=True, folder='thumbnails', filename=post.thumb_name) }}{% endblock %}
 {% block content %}
 <div class="post_page flex-col bg-zinc-800 px-6 py-6 rounded">
-    <div class="post__thumb"><img class="block w-full object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title }}"></div>
+    <div class="post__thumb"><img class="block w-full object-contain" src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name, _external=True) }}" alt="{{ post.title }}"></div>
     <div class="post__title text-3xl lg:text-4xl my-4 font-semibold"><h1>{{ post.title }}</h1></div>
     <div class="post__date mt-3 text-gray-300"><p>Post dodano: {{ moment(post.timestamp).format('LL') }}</p></div>
     <div class="post__author text-gray-300"><p>Autor: {{ post.author.username }}</p></div>
