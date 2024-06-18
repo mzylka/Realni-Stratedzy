@@ -32,6 +32,9 @@ def create_app(config_name):
 
     login_manager.init_app(app)
 
+    from flask_login import login_required
+    from .decorators import content_editor_required
+
     def allowed_file(filename):
         return '.' in filename and filename.split('.')[-1].lower() in {'jpg', 'gif', 'png', 'jpeg', 'webp'}
 
@@ -41,6 +44,8 @@ def create_app(config_name):
         return send_from_directory(path, filename)
 
     @app.route('/upload-cke', methods=['GET', 'POST'])
+    @content_editor_required
+    @login_required
     def upload_cke():
         f = request.files.get('upload')
         upload_folder = os.path.join(app.config['UPLOAD_FOLDER_ABS'], 'cke_images')
