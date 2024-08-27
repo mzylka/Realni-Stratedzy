@@ -527,4 +527,4 @@ def gallery(foldername):
 def delete_image(type, filename):
     delete_img(filename, type=type)
     flash("Obrazek został usunięty!")
-    return redirect(url_for('.gallery', foldername=type + "s"))
+    return redirect(url_for('.gallery', foldername=type))
