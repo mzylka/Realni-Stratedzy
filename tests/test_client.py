@@ -15,13 +15,18 @@ class FlaskClientTestCase(unittest.TestCase):
         admin = User(email='admin@test.com', username='admin', password='123')
         test_user = User(email='testuser@example.com', username='testuser', password='1234')
         game = Game(title='Gra1', producer='Producer1', thumb_name='picture.jpg', body='Game test body', published=True)
+        unpublished_game = Game(title='Gra2', producer='Producer2', thumb_name='picture.jpg', body='Game test body', published=False)
         communities_page_desc = Textfield(name='communities_page', body='Test description')
         community = Community(title='Community1', thumb_name='picture.jpg', body='Test community body', published=True, game=game)
+        unpublished_community = Community(title='Community2', thumb_name='picture.jpg', body='Test unpublished community body', published=False,
+                              game=game)
         tag = Tag(name='tag1')
         post = Post(title='Post1', short_desc='post1 short', thumb_name='picture.jpg', body='Test post body', published=True, game=game)
+        unpublished_post = Post(title='Post2', short_desc='post2 short', thumb_name='picture.jpg', body='Test unpublished post body',
+                    published=False, game=game)
         post.tags.append(tag)
 
-        objs = [admin, test_user, game, community, communities_page_desc, post]
+        objs = [admin, test_user, game, unpublished_game, community, unpublished_community, communities_page_desc, post, unpublished_post]
 
         db.session.add_all(objs)
         db.session.commit()
@@ -41,10 +46,34 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Gra1' in resp.get_data(as_text=True))
 
+        # with filter
+        resp = self.client.get('/gry/?filtr=1')
+        self.assertEquals(resp.status_code, 200)
+        self.assertTrue('Gra1' in resp.get_data(as_text=True))
+
+        resp = self.client.get('/gry/?filtr=2')
+        self.assertEquals(resp.status_code, 200)
+        resp = self.client.get('/gry/?filtr=3')
+        self.assertEquals(resp.status_code, 200)
+        resp = self.client.get('/gry/?filtr=4')
+        self.assertEquals(resp.status_code, 200)
+        resp = self.client.get('/gry/?filtr=5')
+        self.assertEquals(resp.status_code, 200)
+
     def test_communities_page(self):
         resp = self.client.get('/spolecznosci/')
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Community1' in resp.get_data(as_text=True))
+
+        # with filter
+        resp = self.client.get('/spolecznosci/?filtr=1')
+        self.assertEquals(resp.status_code, 200)
+        self.assertTrue('Community1' in resp.get_data(as_text=True))
+
+        resp = self.client.get('/spolecznosci/?filtr=2')
+        self.assertEquals(resp.status_code, 200)
+        resp = self.client.get('/spolecznosci/?filtr=3')
+        self.assertEquals(resp.status_code, 200)
 
     def test_contact_page(self):
         contact_page = Textfield(name='contact_page', body='Test contact body')
@@ -104,12 +133,19 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Post1' in resp.get_data(as_text=True))
 
+    def test_searching_invalid(self):
+        resp = self.client.post('/szukaj', data={
+            'invalid': 'invalid'
+        })
+        self.assertEqual(resp.status_code, 302)
+
     def test_posts_by_game(self):
         resp = self.client.get('/posty/gra1')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Post1' in resp.get_data(as_text=True))
 
-        resp = self.client.get('/posty/gra2')
+    def test_posts_by_invalid_game(self):
+        resp = self.client.get('/posty/gra32')
         self.assertEqual(resp.status_code, 404)
 
     def test_posts_by_tag(self):
@@ -128,6 +164,10 @@ class FlaskClientTestCase(unittest.TestCase):
         resp = self.client.get('/post/unknown')
         self.assertEqual(resp.status_code, 404)
 
+    def test_unpublished_post_page(self):
+        resp = self.client.get('/post/post2')
+        self.assertEqual(resp.status_code, 403)
+
     def test_game_page(self):
         resp = self.client.get('/gra/gra1')
         self.assertEqual(resp.status_code, 200)
@@ -135,6 +175,10 @@ class FlaskClientTestCase(unittest.TestCase):
 
         resp = self.client.get('/gra/unknown')
         self.assertEqual(resp.status_code, 404)
+
+    def test_unpublished_game_page(self):
+        resp = self.client.get('/gra/gra2')
+        self.assertEqual(resp.status_code, 403)
 
     def test_community_page(self):
         resp = self.client.get('/spolecznosc/community1')
@@ -144,12 +188,36 @@ class FlaskClientTestCase(unittest.TestCase):
         resp = self.client.get('/spolecznosc/unknown')
         self.assertEqual(resp.status_code, 404)
 
+    def test_unpublished_community_page(self):
+        resp = self.client.get('/spolecznosc/community2')
+        self.assertEqual(resp.status_code, 403)
+
     def test_community_by_game(self):
         resp = self.client.get('/spolecznosci/gra1')
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Community1' in resp.get_data(as_text=True))
 
-    def test_filtering_games(self):
+    def test_filtering_games_valid(self):
+        resp = self.client.post('/gry/filtruj', data={'filtr': 1})
+        self.assertEquals(resp.status_code, 302)
+
+    def test_filtering_communities_valid(self):
+        resp = self.client.post('/spolecznosci/filtruj', data={'filtr': 1})
+        self.assertEquals(resp.status_code, 302)
+
+    def test_filtering_games_invalid(self):
+        resp = self.client.post('/gry/filtruj', data={'filtr': 0})
+        self.assertEquals(resp.status_code, 302)
+
+    def test_filtering_communities_invalid(self):
+        resp = self.client.post('/spolecznosci/filtruj', data={'filtr': 0})
+        self.assertEquals(resp.status_code, 302)
+
+    def test_filtering_communities_by_game(self):
+        resp = self.client.post('/spolecznosci/filtruj/gra1', data={'filtr': 1})
+        self.assertEquals(resp.status_code, 302)
+
+    def test_sorting_games(self):
         resp = self.client.post('/gry/', data={'filtr': 0})
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Gra1' in resp.get_data(as_text=True))
@@ -174,7 +242,7 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Gra1' in resp.get_data(as_text=True))
 
-    def test_filtering_communities(self):
+    def test_sorting_communities(self):
         resp = self.client.post('/spolecznosci/', data={'filtr': 0})
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Community1' in resp.get_data(as_text=True))
