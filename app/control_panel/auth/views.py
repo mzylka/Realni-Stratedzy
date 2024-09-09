@@ -36,12 +36,6 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        is_username_duplicate = db.session.execute(db.Select(User).filter_by(username=form.username.data)).scalar_one_or_none()
-
-        if is_username_duplicate:
-            flash("Istnieje użytkownik o takiej samej nazwie!")
-            return redirect(url_for('control_panel.auth.register'))
-
         user = User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
