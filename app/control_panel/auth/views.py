@@ -56,7 +56,7 @@ def new_password(id=None):
     user = current_user
     if id:
         user = db.get_or_404(User, id)
-    if user != current_user and not current_user.is_administrator():
+    if user != current_user:
         abort(403)
     form = NewPassForm()
     if form.validate_on_submit():
@@ -97,4 +97,4 @@ def set_new_password(id):
             flash('Hasło nie może być takie samo jak stare!')
             return redirect(url_for('control_panel.auth.set_new_password', id=id))
 
-    return render_template('control_panel/auth/new_password.html', form=form)
+    return render_template('control_panel/auth/new_password.html', form=form, username=user.username)

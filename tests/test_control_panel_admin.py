@@ -1,7 +1,7 @@
 import datetime
 import unittest
 from app import create_app, db
-from app.models import User, Role, Game, Tag, Textfield
+from app.models import User, Role, Game, Tag, Textfield, Link
 from pathlib import Path
 
 
@@ -21,6 +21,7 @@ class AdminTestCase(unittest.TestCase):
         db.session.add(test_user)
         db.session.add(tag1)
         db.session.commit()
+        Link.insert_links()
         self.client = self.app.test_client(use_cookies=True)
         self.resources = Path(__file__).parent / 'resources'
 
@@ -121,14 +122,29 @@ class AdminTestCase(unittest.TestCase):
         })
         self.assertEqual(resp.status_code, 302)
 
-    def test_set_new_password_for_ce_as_admin(self):
+    def test_set_new_password_for_user(self):
         #  log in as admin
         resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
                                 follow_redirects=True)
 
         #  set new password for testuser
-        resp = self.client.post('/control-panel/auth/new-password/2', data={
-            'old_password': '1234',
+        resp = self.client.get('/control-panel/auth/set-new-password/2')
+        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post('/control-panel/auth/set-new-password/2', data={
+            'new_password': 'passw3',
+            'new_password2': 'passw3'
+        })
+        self.assertEqual(resp.status_code, 302)
+
+    def test_set_new_password_but_old_for_user(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+
+        #  set new password for testuser
+        resp = self.client.get('/control-panel/auth/set-new-password/2')
+        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post('/control-panel/auth/set-new-password/2', data={
             'new_password': 'passw3',
             'new_password2': 'passw3'
         })
@@ -223,12 +239,28 @@ class AdminTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         resp = self.client.post('/control-panel/edit-post/1', data={
             'title': 'Test title edit',
+            'thumb': (self.resources / 'picture.jpg').open('rb'),
             'short_desc': 'Short desc',
             'body': 'Testing the body of post!',
             'game': 0,
-            'tags': 'tag1,tag2',
+            'tags': 'tag1,tag2,tag3,tag4',
             'published': True},
             follow_redirects=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue('Post został zaktualizowany.' in resp.get_data(as_text=True))
+
+        #  edit post's tags(remove)
+        resp = self.client.get('/control-panel/edit-post/1')
+        self.assertEqual(resp.status_code, 200)
+        resp = self.client.post('/control-panel/edit-post/1', data={
+            'title': 'Test title edit',
+            'thumb': (self.resources / 'picture.jpg').open('rb'),
+            'short_desc': 'Short desc',
+            'body': 'Testing the body of post!',
+            'game': 0,
+            'tags': 'tag1',
+            'published': True},
+                                follow_redirects=True)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Post został zaktualizowany.' in resp.get_data(as_text=True))
 
@@ -442,3 +474,41 @@ class AdminTestCase(unittest.TestCase):
         resp_text = resp.get_data(as_text=True)
         self.assertTrue('Pole communities_page zostało zaktualizowane.' in resp_text)
         self.assertTrue('Communities_page test' in resp_text)
+
+    def test_edit_links_page(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+        resp = self.client.get('/control-panel/edit-links/')
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('Discord' in resp_text)
+
+    def test_edit_links(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+        resp = self.client.post('/control-panel/edit-links/', data={'discord_link': 'disc_link', 'fb_link': 'testfb_link',
+                                'twitter_link': 'testx_link', 'yt_link': 'testyt_link', 'twitch_link': 'testtw_link'})
+        self.assertEqual(resp.status_code, 200)
+        resp_text = resp.get_data(as_text=True)
+        self.assertTrue('disc_link' in resp_text)
+        self.assertTrue('testfb_link' in resp_text)
+        self.assertTrue('testx_link' in resp_text)
+        self.assertTrue('testyt_link' in resp_text)
+        self.assertTrue('testtw_link' in resp_text)
+
+
+    def test_gallery(self):
+        #  log in as admin
+        resp = self.client.post('/control-panel/auth/login', data={'username': 'admin', 'password': '123'},
+                                follow_redirects=True)
+
+        resp = self.client.get('/control-panel/gallery/thumbnails')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.get('/control-panel/gallery/logos')
+        self.assertEqual(resp.status_code, 200)
+
+        resp = self.client.get('/control-panel/gallery/cke_images')
+        self.assertEqual(resp.status_code, 200)
