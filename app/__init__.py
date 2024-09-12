@@ -6,14 +6,15 @@ from flask_sqlalchemy import SQLAlchemy
 from config import config
 from flask_login import LoginManager
 from flask_pagedown import PageDown
-from flask_ckeditor import CKEditor, upload_success, upload_fail
+from flask_ckeditor import CKEditorManager
 from werkzeug.utils import secure_filename
+from .helpers import upload_success, upload_fail
 
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 pagedown = PageDown()
-ckeditor = CKEditor()
+ckeditor = CKEditorManager()
 
 login_manager = LoginManager()
 login_manager.login_view = 'control_panel.auth.login'
@@ -56,7 +57,7 @@ def create_app(config_name):
         filename = secure_filename(f.filename)
         f.save(os.path.join(upload_folder, filename))
         url = url_for('uploaded_files', folder='cke_images', filename=filename)
-        return upload_success(url, filename=filename)
+        return upload_success(url)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

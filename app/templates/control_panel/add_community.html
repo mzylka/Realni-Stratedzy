@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}{{title}} - {% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5.css', _external=True) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5-content.css', _external=True) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5-editor.css', _external=True) }}">
+{% endblock %}
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
@@ -45,7 +50,7 @@
             </div>
             <div>
                 <p>Treść:</p>
-                {{ form.body(placeholder="Body", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.body(placeholder="Body", class="h-10 mb-4 shadow appearance-none border rounded text-black", required=False) }}
             </div>
             <div>
                 <p>Powiązana gra:</p>
@@ -80,7 +85,20 @@
 </div>
 {% endblock %}
 {% block scripts %}
+<script type="importmap">
+{
+	"imports": {
+		"ckeditor5": "{{ url_for('static', filename='ckeditor5/ckeditor5.js', _external=True) }}",
+		"ckeditor5/": "{{ url_for('static', filename='ckeditor5/', _external=True) }}"
+	}
+}
+</script>
+<script type="module" src="{{ url_for('static', filename='dist/cke.js', _external=True) }}"></script>
+<script type="module">
+    import { ckeConfig, ClassicEditor } from '{{ url_for('static', filename='dist/cke.js', _external=True) }}';
+    let config = ckeConfig("{{ url_for('upload_cke') }}");
+    console.log(config);
+    ClassicEditor.create(document.querySelector('#body'), config);
+</script>
 {{ super() }}
-{{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
-{{ ckeditor.config(name='body', height=700) }}
 {% endblock %}

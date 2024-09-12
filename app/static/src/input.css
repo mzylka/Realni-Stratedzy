@@ -87,3 +87,41 @@ iframe {
     font-size: 1.25rem; /* 24px */
     line-height: inherit;
 }
+
+.ck-editor__editable_inline:not(.ck-comment__input *) {
+    height: 700px;
+    overflow-y: auto;
+}
+
+.ck-content {
+    color: #000;
+}
+
+.ck-content  a{
+    color: #38bdf8;
+}
+
+.ck-content h1{
+    font-size: 1.875rem;
+}
+
+.ck-content h2{
+    font-size: 1.5rem;
+}
+
+.ck-content h3{
+    font-size: 1.25rem;
+}
+
+.ck-content ul,
+.ck-content ul li{
+    list-style-type: inherit;
+}
+
+.ck-content ul{
+    padding-left: 1rem;
+}
+
+.ck-content figure {
+    width: 50%;
+}

@@ -24,6 +24,7 @@
     <meta property="twitter:image" content="{% block t_meta_img %}https://realnistratedzy.pl/static/images/meta.png{% endblock %}" />
     <link rel="icon" href="{{ url_for('static', filename='images/icon.ico', _external=True) }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/style.css', _external=True) }}">
+    {% block link %}{% endblock %}
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KRQ01QXQ7V"></script>
     <script>

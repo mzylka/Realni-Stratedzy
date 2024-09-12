@@ -23,6 +23,8 @@ class Config:
 
     FLASKY_POSTS_PER_PAGE = 20
 
+    CKEDITOR_LANGUAGE = 'pl'
+    CKEDITOR_UPLOAD_ENDPOINT = 'upload_cke'
     CKEDITOR_PKG_TYPE = "standard"
     CKEDITOR_FILE_UPLOADER = 'upload_cke'
     CKEDITOR_SERVE_LOCAL = True
