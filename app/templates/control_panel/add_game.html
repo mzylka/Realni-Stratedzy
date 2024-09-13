@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block title %}{{title}} - {% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5.css', _external=True) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5-content.css', _external=True) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5-editor.css', _external=True) }}">
+{% endblock %}
 {% block main %}
 {% import "_macros.html" as macros %}
 {{ macros.render_back_to_panel() }}
@@ -65,7 +70,7 @@
             </div>
             <div>
                 <p>Treść:</p>
-                {{ form.body(placeholder="Body", class="h-10 mb-4 shadow appearance-none border rounded text-black") }}
+                {{ form.body(placeholder="Body", class="h-10 mb-4 shadow appearance-none border rounded text-black", required=False) }}
             </div>
             <div>
                 <h3>Linki (Opcjonalne):</h3>
@@ -104,7 +109,6 @@
 </div>
 {% endblock %}
 {% block scripts %}
+{% include "cke_script.html" %}
 {{ super() }}
-{{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
-{{ ckeditor.config(name='body', height=700) }}
 {% endblock %}

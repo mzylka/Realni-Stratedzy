@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='ckeditor5/ckeditor5-editor.css', _external=True) }}">
 {% endblock %}
 {% block main %}
-{% import "_macros.html" as macros %}
+{% import "_macros.html" as macros with context %}
 {{ macros.render_back_to_panel() }}
 <div class="bg-zinc-800 px-6 py-6">
     {{ macros.render_flashed_messages() }}
@@ -85,20 +85,6 @@
 </div>
 {% endblock %}
 {% block scripts %}
-<script type="importmap">
-{
-	"imports": {
-		"ckeditor5": "{{ url_for('static', filename='ckeditor5/ckeditor5.js', _external=True) }}",
-		"ckeditor5/": "{{ url_for('static', filename='ckeditor5/', _external=True) }}"
-	}
-}
-</script>
-<script type="module" src="{{ url_for('static', filename='dist/cke.js', _external=True) }}"></script>
-<script type="module">
-    import { ckeConfig, ClassicEditor } from '{{ url_for('static', filename='dist/cke.js', _external=True) }}';
-    let config = ckeConfig("{{ url_for('upload_cke') }}");
-    console.log(config);
-    ClassicEditor.create(document.querySelector('#body'), config);
-</script>
+{% include "cke_script.html" %}
 {{ super() }}
 {% endblock %}

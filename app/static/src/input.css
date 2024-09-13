@@ -68,6 +68,21 @@ iframe {
     object-fit: contain;
 }
 
+.base-content__body img {
+    margin: auto;
+    object-fit: contain;
+}
+
+.base-content__body figure{
+    margin: auto;
+    object-fit: contain;
+}
+
+.base-content__body figure figcaption{
+    text-align: center;
+    font-style: italic;
+}
+
 .base-content__body ul {
     list-style-type: disc;
     list-style-position: inside;
