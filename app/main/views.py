@@ -27,7 +27,7 @@ def posts(game_slug):
     game = db.session.execute(db.select(Game).filter_by(slug_title=game_slug)).scalar_one_or_none()
     if not game:
         abort(404)
-    posts = db.select(Post).filter_by(published=True).where(Post.game_id == game.id).order_by(Post.timestamp)
+    posts = db.select(Post).filter_by(published=True).where(Post.game_id == game.id).order_by(Post.timestamp.desc())
     page = db.paginate(posts)
     return render_template('index.html', page=page, title_h='Posty: ' + game.title + ' - ')
 
