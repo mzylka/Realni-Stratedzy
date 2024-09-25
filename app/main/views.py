@@ -8,17 +8,20 @@ from sqlalchemy import desc
 
 @main.route('/')
 def index():
-    searched = request.args.get('search')
+    search = request.args.get('filtr_type')
+    val = request.args.get('filtr_val')
+    print(val);
     page = None
 
-    if not searched:
+    if not (search and val):
         posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp.desc())
         page = db.paginate(posts)
     else:
-        posts = db.select(Post).filter_by(published=True).where(Post.body.contains(searched))
+        print("searching")
+        posts = db.select(Post).filter_by(published=True).where(Post.body.contains(val)).order_by(Post.timestamp.desc())
         page = db.paginate(posts)
 
-    return render_template('index.html', page=page)
+    return render_template('index.html', page=page, filtr_type=search, filtr_val=val)
 
 
 #  Posts for specified game
@@ -175,7 +178,7 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         searched = form.searched.data
-        return redirect(url_for('main.index', search=searched))
+        return redirect(url_for('main.index', filtr_type='search', filtr_val = searched))
     return redirect(url_for('main.index'))
 
 
