@@ -63,30 +63,31 @@ def game(slug):
 @main.route('/gry/', methods=['GET', 'POST'])
 def games():
     form = GamesFilterForm()
-    filtr = request.args.get('filtr', type=int)
-    if filtr:
-        form.filtr.data = filtr
+    filtr_type = request.args.get('filtr_type')
+    filtr_val = request.args.get('filtr_val', type=int)
+    if filtr_type:
+        form.filtr.data = filtr_val
     order_arg = Game._title
     games = None
 
-    if filtr:
-        if filtr == 1:
+    if filtr_type and filtr_val:
+        if filtr_val == 1:
             order_arg = Game.id.desc()
-        elif filtr == 2:
+        elif filtr_val == 2:
             order_arg = Game._title
-        elif filtr == 3:
+        elif filtr_val == 3:
             order_arg = Game._title.desc()
-        elif filtr == 4:
+        elif filtr_val == 4:
             games = db.select(Game).filter_by(published=True).order_by(desc(Game.release_date.is_(None)),
                                                                        desc(Game.release_date))
-        elif filtr == 5:
+        elif filtr_val == 5:
             games = db.select(Game).filter_by(published=True).order_by(Game.release_date.is_(None), Game.release_date)
 
         if games is None:
             games = db.select(Game).filter_by(published=True).order_by(order_arg)
 
         page = db.paginate(games)
-        return render_template('main/games.html', page=page, form=form)
+        return render_template('main/games.html', page=page, form=form, filtr_type=filtr_type, filtr_val=filtr_val)
 
     games = db.select(Game).filter_by(published=True).order_by(order_arg)
     page = db.paginate(games)
@@ -187,8 +188,8 @@ def search():
 def games_filter():
     form = GamesFilterForm()
     if form.validate_on_submit():
-        filtr = form.filtr.data
-        return redirect(url_for('main.games', filtr=filtr))
+        filtr_val = form.filtr.data
+        return redirect(url_for('main.games', filtr_type="sort", filtr_val=filtr_val))
     return redirect(url_for('main.games'))
 
 
