@@ -120,18 +120,19 @@ def community(slug):
 @main.route('/spolecznosci/<game_slug>', methods=['GET', 'POST'])
 def communities(game_slug=None):
     textfield = db.session.execute(db.select(Textfield).filter_by(name='communities_page')).scalar_one_or_none()
-    filtr = request.args.get('filtr', type=int)
+    filtr_type = request.args.get('filtr_type')
+    filtr_val = request.args.get('filtr_val', type=int)
     form = CommunitiesFilterForm()
-    if filtr:
-        form.filtr.data = filtr
+    if filtr_type:
+        form.filtr.data = filtr_val
     order_arg = Community.id.desc()
 
-    if filtr:
-        if filtr == 1:
+    if filtr_type and filtr_val:
+        if filtr_val == 1:
             order_arg = Community.id.desc()
-        elif filtr == 2:
+        elif filtr_val == 2:
             order_arg = Community._title
-        elif filtr == 3:
+        elif filtr_val == 3:
             order_arg = Community._title.desc()
 
     if game_slug:
@@ -141,11 +142,11 @@ def communities(game_slug=None):
         communities = game.communities.order_by(order_arg)
 
         page = db.paginate(communities)
-        return render_template('main/communities.html', description=textfield.body, page=page, form=form, game_slug=game_slug)
+        return render_template('main/communities.html', description=textfield.body, page=page, form=form, game_slug=game_slug, filtr_type=filtr_type, filtr_val=filtr_val)
 
     communities = db.select(Community).filter_by(published=True).order_by(order_arg)
     page = db.paginate(communities)
-    return render_template('main/communities.html', page=page, form=form, description=textfield.body)
+    return render_template('main/communities.html', page=page, form=form, description=textfield.body, filtr_type=filtr_type, filtr_val=filtr_val)
 
 
 #  About page
@@ -198,8 +199,8 @@ def games_filter():
 def communities_filter(game=None):
     form = CommunitiesFilterForm()
     if form.validate_on_submit():
-        filtr = form.filtr.data
+        filtr_val = form.filtr.data
         if game:
-            return redirect(url_for('main.communities', game_slug=game, filtr=filtr))
-        return redirect(url_for('main.communities', filtr=filtr))
+            return redirect(url_for('main.communities', game_slug=game, filtr_type="sort", filtr_val=filtr_val))
+        return redirect(url_for('main.communities', filtr_type="sort", filtr_val=filtr_val))
     return redirect(url_for('main.communities'))
