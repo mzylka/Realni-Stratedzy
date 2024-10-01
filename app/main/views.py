@@ -61,7 +61,8 @@ def game(slug):
 
 #  Games list
 @main.route('/gry/', methods=['GET', 'POST'])
-def games():
+@main.route('/gry/szukaj/<title>', methods=['GET', 'POST'])
+def games(title=None):
     form = GamesFilterForm()
     filtr_type = request.args.get('filtr_type')
     filtr_val = request.args.get('filtr_val', type=int)
@@ -83,15 +84,12 @@ def games():
         elif filtr_val == 5:
             games = db.select(Game).filter_by(published=True).order_by(Game.release_date.is_(None), Game.release_date)
 
-        if games is None:
-            games = db.select(Game).filter_by(published=True).order_by(order_arg)
-
-        page = db.paginate(games)
-        return render_template('main/games.html', page=page, form=form, filtr_type=filtr_type, filtr_val=filtr_val)
-
-    games = db.select(Game).filter_by(published=True).order_by(order_arg)
+    if games is None:
+        games = db.select(Game).filter_by(published=True).order_by(order_arg)
+    if title:
+        games = games.where(Game._title.contains(title))
     page = db.paginate(games)
-    return render_template('main/games.html', page=page, form=form)
+    return render_template('main/games.html', page=page, form=form, filtr_type=filtr_type, filtr_val=filtr_val)
 
 
 #  Posts list filtered by tag
@@ -180,8 +178,17 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         searched = form.searched.data
-        return redirect(url_for('main.index', filtr_type='search', filtr_val = searched))
+        return redirect(url_for('main.index', filtr_type='search', filtr_val=searched))
     return redirect(url_for('main.index'))
+
+
+@main.route('/szukaj-gry', methods=['POST'])
+def search_game():
+    form = SearchForm()
+    if form.validate_on_submit():
+        searched = form.searched.data
+        return redirect(url_for('main.games', title=searched))
+    return redirect(url_for('main.games'))
 
 
 # Filtering games
