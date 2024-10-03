@@ -83,6 +83,11 @@ iframe {
     object-fit: contain;
 }
 
+.base-content__body figure img{
+    margin: auto;
+    object-fit: contain;
+}
+
 .base-content__body figure figcaption{
     text-align: center;
     font-style: italic;
