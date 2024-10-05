@@ -30,6 +30,10 @@ iframe {
     object-fit: contain;
 }
 
+.post__body figure {
+    margin-bottom: 2rem;
+}
+
 .post__body figure img {
     margin: auto;
     object-fit: contain;
@@ -84,8 +88,7 @@ iframe {
 }
 
 .base-content__body figure{
-    margin: auto;
-    object-fit: contain;
+    margin-bottom: 2rem;
 }
 
 .base-content__body figure img{
