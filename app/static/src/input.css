@@ -35,6 +35,11 @@ iframe {
     object-fit: contain;
 }
 
+.post__body figure figcaption{
+    text-align: center;
+    font-style: italic;
+}
+
 .post__body ul {
     list-style-type: disc;
     list-style-position: inside;
