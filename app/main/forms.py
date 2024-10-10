@@ -10,6 +10,7 @@ class SearchForm(FlaskForm):
 
 class GamesFilterForm(FlaskForm):
     filtr = SelectField('Opcje filtrowania', validators=[DataRequired()], coerce=int, choices=[(1, 'Ostatnio dodane'), (2, 'A - Z'), (3, 'Z - A'), (4, 'Data premiery (Od Nadchodzących/TBD)'), (5, 'Data premiery (Od najstarszych)')], default=2)
+    searched = StringField('Znajdź grę po tytule')
     submit = SubmitField('Filtruj')
 
 class CommunitiesFilterForm(FlaskForm):
