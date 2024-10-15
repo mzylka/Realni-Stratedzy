@@ -26,5 +26,5 @@
     </article>
     {% endfor %}
 </div>
-{{ macros.render_pagination(page, '.games', searched=searched, filtr_val=filtr_val) }}
+{{ macros.render_pagination(page, '.games', **args) }}
 {% endblock %}

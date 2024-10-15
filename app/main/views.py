@@ -8,20 +8,19 @@ from sqlalchemy import desc
 
 @main.route('/')
 def index():
-    searched = request.args.get('searched')
-    print(searched)
+    search = request.args.get('search')
+    args = request.args.to_dict()
+    print(args)
     page = None
 
-    if not (searched):
+    if not search:
         posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp.desc())
         page = db.paginate(posts)
     else:
-        print(searched)
-        posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp.desc()).where(Post.body.contains(searched))
-        print(posts)
+        posts = db.select(Post).filter_by(published=True).order_by(Post.timestamp.desc()).where(Post.body.contains(search))
         page = db.paginate(posts)
 
-    return render_template('index.html', page=page, searched=searched)
+    return render_template('index.html', page=page, args=args)
 
 
 #  Posts for specified game
@@ -63,11 +62,14 @@ def game(slug):
 @main.route('/gry/', methods=['GET', 'POST'])
 def games():
     form = GamesFilterForm()
-    searched = request.args.get('searched', type=str)
+    search = request.args.get('search', type=str)
     filtr_val = request.args.get('filtr_val', type=int)
+    args = request.args.to_dict()
+    if 'page' in args:
+        del args['page']
     if filtr_val:
         form.filtr.data = filtr_val
-        form.searched.data = searched
+        form.searched.data = search
     order_arg = Game._title
     games = None
 
@@ -86,10 +88,10 @@ def games():
 
     if games is None:
         games = db.select(Game).filter_by(published=True).order_by(order_arg)
-    if searched:
-        games = games.where(Game._title.contains(searched))
+    if search:
+        games = games.where(Game._title.contains(search))
     page = db.paginate(games)
-    return render_template('main/games.html', page=page, form=form, searched=searched, filtr_val=filtr_val)
+    return render_template('main/games.html', page=page, form=form, args=args)
 
 
 #  Posts list filtered by tag
@@ -178,7 +180,7 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         searched = form.searched.data
-        return redirect(url_for('main.index', searched=searched))
+        return redirect(url_for('main.index', search=searched))
     return redirect(url_for('main.index'))
 
 
@@ -196,9 +198,11 @@ def search_game():
 def games_filter():
     form = GamesFilterForm()
     if form.validate_on_submit():
-        filtr_val = form.filtr.data
-        title = form.searched.data
-        return redirect(url_for('main.games', searched=title, filtr_val=filtr_val))
+        args = {"filtr_val": form.filtr.data}
+        search = form.searched.data
+        if search:
+            args.update({"search": form.searched.data})
+        return redirect(url_for('main.games', **args))
     return redirect(url_for('main.games'))
 
 
