@@ -10,6 +10,8 @@ from sqlalchemy import desc
 def index():
     search = request.args.get('search')
     args = request.args.to_dict()
+    if 'page' in args:
+        del args['page']
     print(args)
     page = None
 
@@ -31,7 +33,7 @@ def posts(game_slug):
         abort(404)
     posts = db.select(Post).filter_by(published=True).where(Post.game_id == game.id).order_by(Post.timestamp.desc())
     page = db.paginate(posts)
-    return render_template('index.html', page=page, title_h='Posty: ' + game.title + ' - ')
+    return render_template('index.html', page=page, title_h='Posty: ' + game.title + ' - ', args={})
 
 
 #  Post page
@@ -101,7 +103,7 @@ def tag(slug):
     if not tag:
         abort(404)
     page = db.paginate(tag.posts.filter_by(published=True))
-    return render_template('index.html', page=page, title_h='Tag: ' + tag.name + ' - ')
+    return render_template('index.html', page=page, title_h='Tag: ' + tag.name + ' - ', args={})
 
 
 #  Community page
@@ -120,14 +122,14 @@ def community(slug):
 @main.route('/spolecznosci/<game_slug>', methods=['GET', 'POST'])
 def communities(game_slug=None):
     textfield = db.session.execute(db.select(Textfield).filter_by(name='communities_page')).scalar_one_or_none()
-    filtr_type = request.args.get('filtr_type')
     filtr_val = request.args.get('filtr_val', type=int)
+    args = {"filtr_val": filtr_val}
     form = CommunitiesFilterForm()
-    if filtr_type:
+    if filtr_val:
         form.filtr.data = filtr_val
     order_arg = Community.id.desc()
 
-    if filtr_type and filtr_val:
+    if filtr_val:
         if filtr_val == 1:
             order_arg = Community.id.desc()
         elif filtr_val == 2:
@@ -142,11 +144,11 @@ def communities(game_slug=None):
         communities = game.communities.order_by(order_arg)
 
         page = db.paginate(communities)
-        return render_template('main/communities.html', description=textfield.body, page=page, form=form, game_slug=game_slug, filtr_type=filtr_type, filtr_val=filtr_val)
+        return render_template('main/communities.html', description=textfield.body, page=page, form=form, game_slug=game_slug, args=args)
 
     communities = db.select(Community).filter_by(published=True).order_by(order_arg)
     page = db.paginate(communities)
-    return render_template('main/communities.html', page=page, form=form, description=textfield.body, filtr_type=filtr_type, filtr_val=filtr_val)
+    return render_template('main/communities.html', page=page, form=form, description=textfield.body, args=args)
 
 
 #  About page
@@ -182,15 +184,6 @@ def search():
         searched = form.searched.data
         return redirect(url_for('main.index', search=searched))
     return redirect(url_for('main.index'))
-
-
-@main.route('/szukaj-gry', methods=['POST'])
-def search_game():
-    form = SearchForm()
-    if form.validate_on_submit():
-        searched = form.searched.data
-        return redirect(url_for('main.games', title=searched))
-    return redirect(url_for('main.games'))
 
 
 # Filtering games

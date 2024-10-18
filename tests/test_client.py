@@ -1,6 +1,7 @@
 import unittest
 from app import create_app, db
 from app.models import User, Role, Game, Community, Textfield, Post, Tag
+from app.fake import posts, games
 
 
 class FlaskClientTestCase(unittest.TestCase):
@@ -30,6 +31,8 @@ class FlaskClientTestCase(unittest.TestCase):
 
         db.session.add_all(objs)
         db.session.commit()
+        posts(100)
+        games(50)
         self.client = self.app.test_client(use_cookies=True)
 
     def tearDown(self):
@@ -41,24 +44,32 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('Realni' in resp.get_data(as_text=True))
 
+        #  paggination
+        resp = self.client.get('/?page=2')
+        self.assertEquals(resp.status_code, 200)
+
     def test_games_page(self):
         resp = self.client.get('/gry/')
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Gra1' in resp.get_data(as_text=True))
 
         # with filter
-        resp = self.client.get('/gry/?filtr=1')
+        resp = self.client.get('/gry/?filtr_val=1')
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Gra1' in resp.get_data(as_text=True))
 
-        resp = self.client.get('/gry/?filtr=2')
+        resp = self.client.get('/gry/?filtr_val=2')
         self.assertEquals(resp.status_code, 200)
-        resp = self.client.get('/gry/?filtr=3')
+        self.assertTrue('Gra1' in resp.get_data(as_text=True))
+        resp = self.client.get('/gry/?filtr_val=3')
         self.assertEquals(resp.status_code, 200)
-        resp = self.client.get('/gry/?filtr=4')
+        self.assertTrue('Gra1' in resp.get_data(as_text=True))
+        resp = self.client.get('/gry/?filtr_val=4')
         self.assertEquals(resp.status_code, 200)
-        resp = self.client.get('/gry/?filtr=5')
+        self.assertTrue('Gra1' in resp.get_data(as_text=True))
+        resp = self.client.get('/gry/?filtr_val=5')
         self.assertEquals(resp.status_code, 200)
+        self.assertTrue('Gra1' in resp.get_data(as_text=True))
 
     def test_communities_page(self):
         resp = self.client.get('/spolecznosci/')
@@ -66,14 +77,16 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertTrue('Community1' in resp.get_data(as_text=True))
 
         # with filter
-        resp = self.client.get('/spolecznosci/?filtr=1')
+        resp = self.client.get('/spolecznosci/?filtr_val=1')
         self.assertEquals(resp.status_code, 200)
         self.assertTrue('Community1' in resp.get_data(as_text=True))
 
-        resp = self.client.get('/spolecznosci/?filtr=2')
+        resp = self.client.get('/spolecznosci/?filtr_val=2')
         self.assertEquals(resp.status_code, 200)
-        resp = self.client.get('/spolecznosci/?filtr=3')
+        self.assertTrue('Community1' in resp.get_data(as_text=True))
+        resp = self.client.get('/spolecznosci/?filtr_val=3')
         self.assertEquals(resp.status_code, 200)
+        self.assertTrue('Community1' in resp.get_data(as_text=True))
 
     def test_contact_page(self):
         contact_page = Textfield(name='contact_page', body='Test contact body')
