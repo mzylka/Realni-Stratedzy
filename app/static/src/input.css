@@ -33,7 +33,7 @@ iframe {
 .post__body figure {
     margin-bottom: 1.5rem;
     margin-left: auto;
-    margin-bottom: auto;
+    margin-right: auto;
 }
 
 .post__body figure img {
@@ -88,7 +88,7 @@ iframe {
 .base-content__body figure{
     margin-bottom: 1.5rem;
     margin-left: auto;
-    margin-bottom: auto;
+    margin-right: auto;
 }
 
 .base-content__body figure img{
