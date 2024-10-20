@@ -47,11 +47,7 @@ iframe {
 .post__body ul {
     list-style-type: disc;
     list-style-position: inside;
-}
-
-.post__body ul {
-    list-style-type: disc;
-    list-style-position: inside;
+    margin-bottom: 0.5rem;
 }
 
 .post__body h1 {
