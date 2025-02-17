@@ -76,6 +76,10 @@ def add_post():
     if form.validate_on_submit():
         tags = form.tags.data.split(',')
         strip_tags = set([i.strip() for i in tags])
+        post = db.session.execute(db.select(Post._title).where(Post._title == form.title.data)).scalar_one_or_none()
+        if post:
+            flash("The post with the same title already exists")
+            return redirect(url_for('.add_post'))
         post = Post(title=form.title.data, short_desc=form.short_desc.data, body=form.body.data, published=form.published.data, author=current_user, game=Game.query.get(form.game.data))
         db.session.add(post)
 
