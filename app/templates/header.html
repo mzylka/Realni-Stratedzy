@@ -15,6 +15,7 @@
                 <a class="block my-2 py-2 text-lg text-center lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.about_us') }}">O nas</a>
                 <a class="block my-4 py-2 text-lg text-center lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.games') }}">Lista gier RTS</a>
                 <a class="block my-4 py-2 text-lg text-center lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.communities') }}">Społeczności/Klany</a>
+                <a class="block my-4 py-2 text-lg text-center lg:mx-4 transition hover:text-sky-400" href="{{ url_for('main.contact') }}">Kontakt</a>
                 {% if current_user.is_authenticated %}
                 <a class="block my-4 py-2 text-lg text-center lg:mx-4 transition hover:text-sky-400" href="{{ url_for('control_panel.index') }}">Panel</a>
                 {% endif %}
