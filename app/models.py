@@ -152,6 +152,7 @@ class BaseDataModel(db.Model):
     _title = db.Column(db.String(128))
     slug_title = db.Column(db.String(128), unique=True, index=True)
     thumb_name = db.Column(db.String(128))
+    thumb_name_min = db.Column(db.String(128))
     body = db.Column(db.Text)
     published = db.Column(db.Boolean, default=False)
 

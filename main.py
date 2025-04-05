@@ -67,3 +67,5 @@ def deploy():
     Role.insert_roles()
     Textfield.insert_textfields()
     Link.insert_links()
+
+

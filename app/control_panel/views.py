@@ -96,8 +96,9 @@ def add_post():
         db.session.flush()
 
         f = form.thumb.data
-        thumb_name = upload_img(f, str(post.id))
-        post.thumb_name = thumb_name
+        thumbs = upload_img(f, str(post.id))
+        post.thumb_name = thumbs[0]
+        post.thumb_name_min = thumbs[1]
 
         db.session.commit()
         flash('Post został dodany.')
@@ -122,8 +123,9 @@ def edit_post(id):
 
     if form.validate_on_submit():
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, str(post.id))
-            post.thumb_name = thumb_name
+            thumbs = upload_img(form.thumb.data, str(post.id))
+            post.thumb_name = thumbs[0]
+            post.thumb_name_min = thumbs[1]
         post.title = form.title.data
         post.short_desc = form.short_desc.data
         post.body = form.body.data
@@ -176,6 +178,8 @@ def delete_post(id):
     if not current_user.is_post_author(post) and not current_user.is_administrator():
         abort(403)
     delete_img(post.thumb_name)
+    if post.thumb_name_min:
+        delete_image(post.thumb_name_min)
     db.session.delete(post)
     db.session.commit()
     flash('Post został usunięty.')
@@ -211,8 +215,9 @@ def add_game():
                     twitter_link=form.twitter_link.data, fb_link=form.fb_link.data, reddit_link=form.reddit_link.data,
                     discord_link=form.discord_link.data, published=form.published.data)
         f = form.thumb.data
-        thumb_name = upload_img(f, game.slug, type="logo")
-        game.thumb_name = thumb_name
+        thumbs = upload_img(f, game.slug, type="logo")
+        game.thumb_name = thumbs[0]
+        game.thumb_name_min = thumbs[1]
 
         db.session.add(game)
         db.session.commit()
@@ -232,8 +237,9 @@ def edit_game(id):
 
     if form.validate_on_submit():
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, game.slug, type="logo")
-            game.thumb_name = thumb_name
+            thumbs = upload_img(form.thumb.data, game.slug, type="logo")
+            game.thumb_name = thumbs[0]
+            game.thumb_name_min = thumbs[1]
 
         game.title = form.title.data
         game.producer = form.producer.data
@@ -271,6 +277,8 @@ def edit_game(id):
 def delete_game(id):
     game = db.get_or_404(Game, id)
     delete_img(game.thumb_name, type='logo')
+    if game.thumb_name_min:
+        delete_image(game.thumb_name_min, type='logo')
     db.session.delete(game)
     db.session.commit()
     flash('Gra została usunięta.')
@@ -358,8 +366,9 @@ def add_community():
                               discord_link=form.discord_link.data, fb_link=form.fb_link.data, published=form.published.data)
 
         f = form.thumb.data
-        logo = upload_img(f, community.slug_title, type="logo")
-        community.thumb_name = logo
+        logos = upload_img(f, community.slug_title, type="logo")
+        community.thumb_name = logos[0]
+        community.thumb_name_min = logos[1]
 
         db.session.add(community)
         db.session.commit()
@@ -387,8 +396,9 @@ def edit_community(id):
         community.published = form.published.data
 
         if form.thumb.data:
-            thumb_name = upload_img(form.thumb.data, community.slug, type="logo")
-            community.thumb_name = thumb_name
+            thumb_names = upload_img(form.thumb.data, community.slug, type="logo")
+            community.thumb_name = thumb_names[0]
+            community.thumb_name_min = thumb_names[1]
 
         db.session.add(community)
         db.session.commit()
@@ -413,6 +423,8 @@ def edit_community(id):
 def delete_community(id):
     community = db.get_or_404(Community, id)
     delete_img(community.thumb_name, type='logo')
+    if community.thumb_name_min:
+        delete_image(community.thumb_name_min, type='logo')
     db.session.delete(community)
     db.session.commit()
     flash('Społeczność została usunięta.')
