@@ -23,9 +23,9 @@
             <a class="community__link bg-zinc-800 block w-60 h-full p-1 lg:p-2 rounded-lg shadow-md hover:ring-2 ring-red-600 hover:text-sky-400 transition" href="{{ url_for('.community', slug=community.slug) }}">
                 <div class="community__thumb_block mt-3">
                     {% if community.thumb_name_min %}
-                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name_min) }}" alt="{{ community.title + 'thumb_min' }}">
+                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name_min) }}" alt="{{ community.title + 'thumb_min' }}" loading="lazy">
                     {% else %}
-                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title + 'thumb' }}">
+                    <img class="h-32 mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title + 'thumb' }}" loading="lazy">
                     {% endif %}
                 </div>
                 <div class="community__desc_block text-center">

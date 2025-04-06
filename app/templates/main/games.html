@@ -18,9 +18,9 @@
         <a class="game__link w-full flex items-center p-2 lg:p-4 hover:text-sky-400 transition" href="{{ url_for('.game', slug=game.slug) }}">
             <div class="game__thumb_block">
                 {% if game.thumb_name_min %}
-                <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='logos', filename=game.thumb_name_min) }}" alt="{{ game.title + 'thumb_min' }}">
+                <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='logos', filename=game.thumb_name_min) }}" alt="{{ game.title + 'thumb_min' }}" loading="lazy">
                 {% else %}
-                <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='logos', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}">
+                <img class="w-40 lg:w-48 h-20 object-contain" src="{{ url_for('uploaded_files', folder='logos', filename=game.thumb_name) }}" alt="{{ game.title + 'thumb' }}" loading="lazy">
                 {% endif %}
             </div>
             <div class="game__desc_block ml-4">
