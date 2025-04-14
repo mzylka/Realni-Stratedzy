@@ -43,7 +43,7 @@ def upload_fail(message: str):
 
 
 def save_resized_image(file, type, name):
-    size = 320, 180
+    size = app.config['IMG_W'], app.config['IMG_H']
     try:
         im = Image.open(file)
         im.thumbnail(size, Image.Resampling.LANCZOS)

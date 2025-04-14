@@ -11,9 +11,9 @@
         <a class="block pb-6 lg:flex lg:p-2 group" href="{{ url_for('.post', slug=post.slug) }}">
             <div class="post__thumb_block flex lg:items-center shrink-0">
                 {% if post.thumb_name_min %}
-                <img class="block object-contain lg:max-h-48 w-full lg:w-80" data-src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name_min) }}" alt="{{ post.title + ' thumb' }}">
+                <img class="block object-contain lg:h-48 w-full lg:w-80" data-src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name_min) }}" alt="{{ post.title + ' thumb' }}">
                 {% else %}
-                <img class="block object-contain lg:max-h-48 w-full lg:w-80" data-src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title + ' thumb' }}">
+                <img class="block object-contain lg:h-48 w-full lg:w-80" data-src="{{ url_for('uploaded_files', folder='thumbnails', filename=post.thumb_name) }}" alt="{{ post.title + ' thumb' }}">
                 {% endif %}
             </div>
             <div class="post__desc_block py-2 lg:py-0 px-2">

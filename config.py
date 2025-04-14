@@ -35,6 +35,9 @@ class Config:
     SQLALCHEMY_RECORD_QUERIES = True
     SLOW_DB_QUERY_TIME = 0.5
 
+    IMG_H = 252
+    IMG_W = 448
+
     @staticmethod
     def init_app(app):
         pass
