@@ -17,7 +17,7 @@
     <div class="post__body lg:text-lg my-3 font-normal">{{ post.body | safe }}</div>
     <div class="post__tags mt-1 pt-2 flex flex-wrap border-t">
         {% for tag in post.tags %}
-        <a class="post__tag block bg-zinc-700 rounded mr-2 p-1 text-sky-400 hover:text-red-600" href="{{ url_for('main.tag', slug=tag.slug) }}">{{ tag.name }}</a>
+        <a class="post__tag block bg-zinc-700 rounded mr-2 mt-1 p-1 text-sky-400 hover:text-red-600" href="{{ url_for('main.tag', slug=tag.slug) }}">{{ tag.name }}</a>
         {% endfor %}
     </div>
 </div>
