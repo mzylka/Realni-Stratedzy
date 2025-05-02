@@ -3,9 +3,9 @@
 {% block og_meta_img %}{{ url_for('uploaded_files', _external=True, folder='logos', filename=community.thumb_name) }}{% endblock %}
 {% block t_meta_img %}{{ url_for('uploaded_files', _external=True, folder='logos', filename=community.thumb_name) }}{% endblock %}
 {% block content %}
-<div class="base-content flex-col bg-zinc-800 px-6 py-6">
+<div class="base-content flex-col bg-zinc-800 px-2 lg:px-4 py-2 mb-2 rounded">
   <div class="base-content__top flex flex-col lg:flex-row">
-    <div class="base-content__left grow pr-4">
+    <div class="base-content__left grow lg:pr-4">
       <div class="base-content__thumb mb-4"><img class="mx-auto" src="{{ url_for('uploaded_files', folder='logos', filename=community.thumb_name) }}" alt="{{ community.title }}"></div>
       <div class="base-content__title text-3xl lg:text-4xl my-2 font-semibold"><h1>{{ community.title }}</h1></div>
       {% if community.game and community.game.published%}
