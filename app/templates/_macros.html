@@ -1,5 +1,5 @@
 {% macro render_pagination(pagination, endpoint) %}
-<div class="pagination flex bg-zinc-800 rounded-lg my-4">
+<div class="pagination flex bg-zinc-800 rounded-lg my-4 mx-2">
   <div class="pagination-left p-2 m-2">
     <a class="bg-zinc-700 py-2 px-4 hover:text-sky-400 transition-colors rounded" href="{% if pagination.has_prev %}{{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}">
       &laquo;

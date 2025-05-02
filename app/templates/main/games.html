@@ -2,7 +2,7 @@
 {% block title %}Lista gier RTS - {% endblock %}
 {% import "_macros.html" as macros %}
 {% block content %}
-<div class="games">
+<div class="games px-2">
     <div class="game__form_filter mb-5">
         <div class="lg:justify-end">
             <form class="game__filter-form flex flex-col items-center sm:block" method="POST" action="{{ url_for('main.games_filter') }}">
